@@ -1,10 +1,11 @@
 <?php
-$host = "localhost";
+$host = "turntable.proxy.rlwy.net";
+$port = "56276";
 $usuario = "root";
-$password = "";
-$bd="restaurante";
+$password = "nnttbKnlsepXHfAwsDOuVOlkkGvngAkN";
+$bd="railway";
 
-$conexao= new mysqli($host, $usuario, $password,$bd);
+$conexao= new mysqli($host,$port, $usuario, $password,$bd);
 
 if ($conexao->connect_error){
 
