@@ -1,0 +1,376 @@
+[2025-10-29 08:43:37] ==== CALLBACK RECEBIDO ====
+[2025-10-29 08:43:37] Raw payload: {"event":"payment.success","data":{"id":"50c35b94-7b44-41da-bf30-63487e916f11","amount":"1.00","reference":"EC1DE95465C2"}}
+[2025-10-29 08:43:37] Evento: payment.success | Status interpretado: sucesso | Referência: EC1DE95465C2
+[2025-10-29 08:43:37] Atualizando status da transação para 'sucesso'...
+[2025-10-29 08:43:37] Transações afetadas: 1
+[2025-10-29 08:43:37] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 08:43:37] Transação encontrada → Usuário: 6 | Total: 1.00 | Método: 3
+[2025-10-29 08:43:37] ❌ ERRO CALLBACK: Carrinho não encontrado para usuário 6
+[2025-10-29 08:50:28] ==== CALLBACK RECEBIDO ====
+[2025-10-29 08:50:28] Raw payload: {"event":"payment.success","data":{"id":"f28fe3a6-8fd7-43f2-95b3-2012c90cfe38","amount":"1.00","reference":"B49665595CDE"}}
+[2025-10-29 08:50:28] Evento: payment.success | Status interpretado: sucesso | Referência: B49665595CDE
+[2025-10-29 08:50:28] Atualizando status da transação para 'sucesso'...
+[2025-10-29 08:50:28] Transações afetadas: 1
+[2025-10-29 08:50:28] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 08:50:28] Transação encontrada → Usuário: 6 | Total: 1.00 | Método: 3
+[2025-10-29 08:50:28] Carrinho encontrado → ID: 173
+[2025-10-29 08:50:28] ❌ ERRO CALLBACK: Unknown column 'ic.preco' in 'field list'
+[2025-10-29 14:29:13] ==== CALLBACK RECEBIDO ====
+[2025-10-29 14:29:13] Raw payload: {"event":"payment.success","data":{"id":"938b2be2-4074-4c76-ba1a-deb5c10897e6","amount":"1.00","reference":"3550CA0B54D6"}}
+[2025-10-29 14:29:13] Evento: payment.success | Status interpretado: sucesso | Referência: 3550CA0B54D6
+[2025-10-29 14:29:13] Atualizando status da transação para 'sucesso'...
+[2025-10-29 14:29:13] Transações afetadas: 1
+[2025-10-29 14:29:13] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 14:29:13] Transação encontrada → Usuário: 6 | Total: 1.00 | Método: 4
+[2025-10-29 14:29:13] Carrinho encontrado → ID: 173
+[2025-10-29 14:29:13] Itens encontrados no carrinho: 1
+[2025-10-29 14:29:13] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 14:29:13] Pedido criado → ID: 209
+[2025-10-29 14:52:13] ==== CALLBACK RECEBIDO ====
+[2025-10-29 14:52:13] Raw payload: {"event":"payment.success","data":{"id":"f882ed11-7a7d-4259-99cc-48368cbd3378","amount":"1.00","reference":"CF57C2F49C7B"}}
+[2025-10-29 14:52:13] Evento: payment.success | Status interpretado: sucesso | Referência: CF57C2F49C7B
+[2025-10-29 14:52:13] Atualizando status da transação para 'sucesso'...
+[2025-10-29 14:52:13] Transações afetadas: 1
+[2025-10-29 14:52:13] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 14:52:13] Transação encontrada → Usuário: 6 | Total: 1.00 | Método: 3
+[2025-10-29 14:52:13] Carrinho encontrado → ID: 173
+[2025-10-29 14:52:13] Itens encontrados no carrinho: 1
+[2025-10-29 14:52:13] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 14:52:13] Pedido criado → ID: 210
+[2025-10-29 14:55:45] ==== CALLBACK RECEBIDO ====
+[2025-10-29 14:55:45] Raw payload: {"event":"payment.success","data":{"id":"881aa6fc-4baf-4899-ada6-5d83751ccd5b","amount":"1.00","reference":"0F8259B7C4BA"}}
+[2025-10-29 14:55:45] Evento: payment.success | Status interpretado: sucesso | Referência: 0F8259B7C4BA
+[2025-10-29 14:55:45] Atualizando status da transação para 'sucesso'...
+[2025-10-29 14:55:45] Transações afetadas: 1
+[2025-10-29 14:55:45] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 14:55:45] Transação encontrada → Usuário: 6 | Total: 1.00 | Método: 4
+[2025-10-29 14:55:45] Carrinho encontrado → ID: 173
+[2025-10-29 14:55:46] Itens encontrados no carrinho: 1
+[2025-10-29 14:55:46] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 14:55:46] Pedido criado → ID: 211
+[2025-10-29 18:39:22] ==== CALLBACK RECEBIDO ====
+[2025-10-29 18:39:22] Raw payload: {"event":"payment.success","data":{"id":"6541681d-acb3-48ef-80de-d67c5374c31a","amount":"1.00","reference":"6B44E0A99DA8"}}
+[2025-10-29 18:39:22] Evento: payment.success | Status interpretado: sucesso | Referência: 6B44E0A99DA8
+[2025-10-29 18:39:22] Atualizando status da transação para 'sucesso'...
+[2025-10-29 18:39:22] Transações afetadas: 1
+[2025-10-29 18:39:22] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 18:39:22] Transação encontrada → Usuário: 5 | Total: 1.00 | Método: 3
+[2025-10-29 18:39:22] Carrinho encontrado → ID: 170
+[2025-10-29 18:39:22] Itens encontrados no carrinho: 1
+[2025-10-29 18:39:22] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 18:39:22] Pedido criado → ID: 212 (Status: pendente)
+[2025-10-29 18:50:56] ==== CALLBACK RECEBIDO ====
+[2025-10-29 18:50:56] Raw payload: {"event":"payment.success","data":{"id":"05fec0ed-c68c-4913-a611-78d55ede95e3","amount":"1.00","reference":"122AE6231709"}}
+[2025-10-29 18:50:56] Evento: payment.success | Status interpretado: sucesso | Referência: 122AE6231709
+[2025-10-29 18:50:56] Atualizando status da transação para 'sucesso'...
+[2025-10-29 18:50:56] Transações afetadas: 1
+[2025-10-29 18:50:56] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 18:50:56] Transação encontrada → Usuário: 5 | Total: 1.00 | Método: 3
+[2025-10-29 18:50:56] Carrinho encontrado → ID: 170
+[2025-10-29 18:50:56] Itens encontrados no carrinho: 1
+[2025-10-29 18:50:56] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 18:50:56] Pedido criado → ID: 213 (Status: pendente)
+[2025-10-29 19:16:56] ==== CALLBACK RECEBIDO ====
+[2025-10-29 19:16:56] Raw payload: {"event":"payment.success","data":{"id":"f62a7e2c-9fb6-4209-a0b0-036f3bb88965","amount":"1.00","reference":"B022D555DB19"}}
+[2025-10-29 19:16:56] Evento: payment.success | Status interpretado: sucesso | Referência: B022D555DB19
+[2025-10-29 19:16:56] Atualizando status da transação para 'sucesso'...
+[2025-10-29 19:16:56] Transações afetadas: 1
+[2025-10-29 19:16:56] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 19:16:56] Transação encontrada → Usuário: 5 | Total: 1.00 | Método: 3
+[2025-10-29 19:16:56] Carrinho encontrado → ID: 170
+[2025-10-29 19:16:56] Itens encontrados no carrinho: 1
+[2025-10-29 19:16:56] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 19:16:56] Pedido criado → ID: 214 (Status: pendente)
+[2025-10-29 20:45:46] ==== CALLBACK RECEBIDO ====
+[2025-10-29 20:45:46] Raw payload: {"event":"payment.success","data":{"id":"e1c6d80c-ca36-4e44-be6b-0a8304759781","amount":"1.00","reference":"D76C8F6A3F46"}}
+[2025-10-29 20:45:46] Evento: payment.success | Status interpretado: sucesso | Referência: D76C8F6A3F46
+[2025-10-29 20:45:46] Atualizando status da transação para 'sucesso'...
+[2025-10-29 20:45:46] Transações afetadas: 1
+[2025-10-29 20:45:46] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 20:45:46] Transação encontrada → Usuário: 5 | Total: 1.00 | Método: 4
+[2025-10-29 20:45:46] Carrinho encontrado → ID: 170
+[2025-10-29 20:45:46] Itens encontrados no carrinho: 1
+[2025-10-29 20:45:46] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 20:45:46] Pedido criado → ID: 216 (Status: pendente)
+[2025-10-29 20:49:35] ==== CALLBACK RECEBIDO ====
+[2025-10-29 20:49:35] Raw payload: {"event":"payment.success","data":{"id":"3ffc041a-d469-45c4-9568-ce858de91eeb","amount":"1.00","reference":"2E0A6ABF51FD"}}
+[2025-10-29 20:49:35] Evento: payment.success | Status interpretado: sucesso | Referência: 2E0A6ABF51FD
+[2025-10-29 20:49:35] Atualizando status da transação para 'sucesso'...
+[2025-10-29 20:49:35] Transações afetadas: 1
+[2025-10-29 20:49:35] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 20:49:35] Transação encontrada → Usuário: 5 | Total: 1.00 | Método: 3
+[2025-10-29 20:49:35] Carrinho encontrado → ID: 170
+[2025-10-29 20:49:35] Itens encontrados no carrinho: 1
+[2025-10-29 20:49:35] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 20:49:35] Pedido criado → ID: 217 (Status: pendente)
+[2025-10-29 21:00:06] ==== CALLBACK RECEBIDO ====
+[2025-10-29 21:00:06] Raw payload: {"event":"payment.success","data":{"id":"4d83e2f4-a400-4995-bbbf-8414c89acdd4","amount":"1.00","reference":"CD9A155AA7EB"}}
+[2025-10-29 21:00:06] Evento: payment.success | Status interpretado: sucesso | Referência: CD9A155AA7EB
+[2025-10-29 21:00:06] Atualizando status da transação para 'sucesso'...
+[2025-10-29 21:00:06] Transações afetadas: 1
+[2025-10-29 21:00:06] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 21:00:06] Transação encontrada → Usuário: 5 | Total: 1.00 | Método: 3
+[2025-10-29 21:00:06] Carrinho encontrado → ID: 170
+[2025-10-29 21:00:06] Itens encontrados no carrinho: 1
+[2025-10-29 21:00:06] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 21:00:06] Pedido criado → ID: 218 (Status: pendente)
+[2025-10-29 21:00:06] Itens do pedido inseridos.
+[2025-10-29 21:00:06] Pontos fidelidade atualizados: +0
+[2025-10-29 21:00:06] Carrinho #170 finalizado.
+[2025-10-29 21:00:06] Notificação de pedido enviada para ID 218.
+[2025-10-29 21:00:06] ✅ Callback concluído com sucesso para CD9A155AA7EB (status=sucesso). Retornando 200 OK.
+[2025-10-29 21:16:31] ==== CALLBACK RECEBIDO ====
+[2025-10-29 21:16:31] Raw payload: {"event":"payment.failed","data":{"id":"24ae1985-3728-4b55-8481-2e521fb0b84b","amount":"1.00","reference":"7288D612E2A6"}}
+[2025-10-29 21:16:31] Evento: payment.failed | Status interpretado: falhou | Referência: 7288D612E2A6
+[2025-10-29 21:16:31] Atualizando status da transação para 'falhou'...
+[2025-10-29 21:16:31] Transações afetadas: 1
+[2025-10-29 21:16:31] ✅ Callback concluído com sucesso para 7288D612E2A6 (status=falhou). Retornando 200 OK.
+[2025-10-29 21:21:39] ==== CALLBACK RECEBIDO ====
+[2025-10-29 21:21:39] Raw payload: {"event":"payment.success","data":{"id":"3ee7b26c-0951-4a99-8c50-8e95a5616015","amount":"1.00","reference":"1482CD2090D9"}}
+[2025-10-29 21:21:39] Evento: payment.success | Status interpretado: sucesso | Referência: 1482CD2090D9
+[2025-10-29 21:21:39] Atualizando status da transação para 'sucesso'...
+[2025-10-29 21:21:39] Transações afetadas: 1
+[2025-10-29 21:21:39] Pagamento bem-sucedido. Buscando transação...
+[2025-10-29 21:21:39] Transação encontrada → Usuário: 6 | Total: 1.00 | Método: 3
+[2025-10-29 21:21:39] Carrinho encontrado → ID: 173
+[2025-10-29 21:21:39] Itens encontrados no carrinho: 1
+[2025-10-29 21:21:39] Ingredientes para deduzir: {"Tomate":2,"P\u00e3o para Hamb\u00farguer ":1,"Alface":2,"Cebola":1,"Picles de Pepino":1,"Por\u00e7\u00e3o normal de batatas":1}
+[2025-10-29 21:21:39] Pedido criado → ID: 219 (Status: pendente)
+[2025-10-29 21:21:39] Itens do pedido inseridos.
+[2025-10-29 21:21:39] Pontos fidelidade atualizados: +0
+[2025-10-29 21:21:39] Carrinho #173 finalizado.
+[2025-10-29 21:21:39] Notificação de pedido enviada para ID 219.
+[2025-10-29 21:21:39] ✅ Callback concluído com sucesso para 1482CD2090D9 (status=sucesso). Retornando 200 OK.
+[2025-10-31 21:09:38] ==== CALLBACK RECEBIDO ====
+[2025-10-31 21:09:38] Raw payload: {"event":"payment.success","data":{"id":"fde6a3d8-9d0c-4557-8a34-97ac9f027334","amount":"1.00","reference":"573B6BF00745"}}
+[2025-10-31 21:09:38] Evento: payment.success | Status interpretado: sucesso | Referência: 573B6BF00745
+[2025-10-31 21:09:38] Atualizando status da transação para 'sucesso'...
+[2025-10-31 21:09:38] Transações afetadas: 1
+[2025-10-31 21:09:38] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-10-31 21:09:38] ❌ ERRO CALLBACK: Unknown column 't.id_transacao' in 'field list' | Linha: 86
+[2025-10-31 21:13:05] ==== CALLBACK RECEBIDO ====
+[2025-10-31 21:13:05] Raw payload: {"event":"payment.success","data":{"id":"6008b1cb-af25-4ce3-8000-3980c1e52b31","amount":"1.00","reference":"883968E51C7F"}}
+[2025-10-31 21:13:05] Evento: payment.success | Status interpretado: sucesso | Referência: 883968E51C7F
+[2025-10-31 21:13:05] Atualizando status da transação para 'sucesso'...
+[2025-10-31 21:13:05] Transações afetadas: 1
+[2025-10-31 21:13:05] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-10-31 21:13:05] Pedido Temp encontrado → Usuário: 6 | Total: 1
+[2025-10-31 21:13:05] ❌ ERRO CALLBACK: Unknown column 'pontos_gastos' in 'field list' | Linha: 127
+[2025-10-31 21:16:22] ==== CALLBACK RECEBIDO ====
+[2025-10-31 21:16:22] Raw payload: {"event":"payment.success","data":{"id":"1f05cc24-aca5-4f6a-b486-ccb452ea8402","amount":"1.00","reference":"85A93795C8A0"}}
+[2025-10-31 21:16:22] Evento: payment.success | Status interpretado: sucesso | Referência: 85A93795C8A0
+[2025-10-31 21:16:22] Atualizando status da transação para 'sucesso'...
+[2025-10-31 21:16:22] Transações afetadas: 1
+[2025-10-31 21:16:22] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-10-31 21:16:22] Pedido Temp encontrado → Usuário: 6 | Total: 1
+[2025-10-31 21:16:22] Pedido final ID 221 inserido com sucesso.
+[2025-10-31 21:16:22] ❌ ERRO CRÍTICO CALLBACK: Column 'preco_unitario' cannot be null | Linha: 190
+[2025-10-31 21:21:25] ==== CALLBACK RECEBIDO ====
+[2025-10-31 21:21:25] Raw payload: {"event":"payment.success","data":{"id":"33758fcb-1900-4845-885f-a1a70f0ae497","amount":"1.00","reference":"741B15D050EA"}}
+[2025-10-31 21:21:25] Evento: payment.success | Status interpretado: sucesso | Referência: 741B15D050EA
+[2025-10-31 21:21:25] Atualizando status da transação para 'sucesso'...
+[2025-10-31 21:21:25] Transações afetadas: 1
+[2025-10-31 21:21:25] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-10-31 21:21:25] Pedido Temp encontrado → Usuário: 6 | Total: 1
+[2025-10-31 21:21:25] Pedido final ID 222 inserido com sucesso.
+[2025-10-31 21:21:25] Itens do pedido e personalizações inseridos. Estoque atualizado.
+[2025-10-31 21:21:25] Processo de callback finalizado e transação de BD confirmada.
+[2025-10-31 22:27:02] ==== CALLBACK RECEBIDO ====
+[2025-10-31 22:27:02] Raw payload: {"event":"payment.success","data":{"id":"d9caaadc-4901-4d8f-a90a-d98e22d55453","amount":"1.00","reference":"B5A938282E1F"}}
+[2025-10-31 22:27:02] Evento: payment.success | Status interpretado: sucesso | Referência: B5A938282E1F
+[2025-10-31 22:27:02] Atualizando status da transação para 'sucesso'...
+[2025-10-31 22:27:02] Transações afetadas: 1
+[2025-10-31 22:27:02] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-10-31 22:27:02] Pedido Temp encontrado → Usuário: 6 | Total: 1 | Pontos Gastos: 0
+[2025-10-31 22:27:02] Pedido final ID 223 inserido com sucesso.
+[2025-10-31 22:27:02] Itens do pedido e personalizações inseridos. Estoque atualizado.
+[2025-10-31 22:27:02] Iniciando gestão de fidelidade...
+[2025-10-31 22:27:02] Gestão de fidelidade concluída.
+[2025-10-31 22:27:02] Iniciando limpeza do carrinho ativo...
+[2025-10-31 22:27:02] Carrinho ativo #174 encontrado.
+[2025-10-31 22:27:02] Carrinho ativo #174 finalizado e limpo.
+[2025-10-31 22:27:02] Processo de callback finalizado e transação confirmada.
+[2025-10-31 22:31:50] ==== CALLBACK RECEBIDO ====
+[2025-10-31 22:31:50] Raw payload: {"event":"payment.success","data":{"id":"2fa4c66e-7117-451a-b0ba-f7b2cbbfa032","amount":"1.00","reference":"56B94B1EBCA3"}}
+[2025-10-31 22:31:50] Evento: payment.success | Status interpretado: sucesso | Referência: 56B94B1EBCA3
+[2025-10-31 22:31:50] Atualizando status da transação para 'sucesso'...
+[2025-10-31 22:31:50] Transações afetadas: 1
+[2025-10-31 22:31:50] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-10-31 22:31:50] Pedido Temp encontrado → Usuário: 6 | Total: 1 | Pontos Gastos: 0
+[2025-10-31 22:31:50] Pedido final ID 224 inserido com sucesso.
+[2025-10-31 22:31:50] Itens do pedido e personalizações inseridos. Estoque atualizado.
+[2025-10-31 22:31:50] Iniciando gestão de fidelidade...
+[2025-10-31 22:31:50] Gestão de fidelidade concluída.
+[2025-10-31 22:31:50] Iniciando limpeza do carrinho ativo...
+[2025-10-31 22:31:50] Carrinho ativo #177 encontrado.
+[2025-10-31 22:31:50] Carrinho ativo #177 finalizado e limpo.
+[2025-10-31 22:31:50] Processo de callback finalizado e transação confirmada.
+[2025-11-01 01:40:31] ==== CALLBACK RECEBIDO ====
+[2025-11-01 01:40:31] Raw payload: {"event":"payment.success","data":{"id":"5c18194f-17fe-4e8e-a156-51295837e603","amount":"1.00","reference":"31B1A8F9EE78"}}
+[2025-11-01 01:40:31] Evento: payment.success | Status interpretado: sucesso | Referência: 31B1A8F9EE78
+[2025-11-01 01:40:31] Atualizando status da transação para 'sucesso'...
+[2025-11-01 01:40:31] Transações afetadas: 1
+[2025-11-01 01:40:31] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-01 01:40:31] Pedido Temp encontrado → Usuário: 5 | Total: 1 | Pontos Gastos: 0
+[2025-11-01 01:40:31] Pedido final ID 225 inserido com sucesso.
+[2025-11-01 01:40:31] Itens do pedido e personalizações inseridos. Estoque atualizado.
+[2025-11-01 01:40:31] Iniciando gestão de fidelidade...
+[2025-11-01 01:40:31] Gestão de fidelidade concluída.
+[2025-11-01 01:40:31] Iniciando limpeza do carrinho ativo...
+[2025-11-01 01:40:31] Carrinho ativo #176 encontrado.
+[2025-11-01 01:40:31] Carrinho ativo #176 finalizado e limpo.
+[2025-11-01 01:40:31] Processo de callback finalizado e transação confirmada.
+[2025-11-06 21:12:32] ==== CALLBACK RECEBIDO ====
+[2025-11-06 21:12:32] Raw payload: {"event":"payment.success","data":{"id":"988ef8cb-f51e-44ff-b226-5080fd727c01","amount":"1.00","reference":"F1A063E4B04B"}}
+[2025-11-06 21:12:32] Evento: payment.success | Status interpretado: sucesso | Referência: F1A063E4B04B
+[2025-11-06 21:12:32] Atualizando status da transação para 'sucesso'...
+[2025-11-06 21:12:32] Transações afetadas: 1
+[2025-11-06 21:12:32] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-06 21:12:32] Pedido Temp encontrado → Usuário: 5 | Total: 1 | Pontos Gastos: 0
+[2025-11-06 21:12:32] Pedido final ID 226 inserido com sucesso.
+[2025-11-06 21:12:32] ❌ ERRO CRÍTICO CALLBACK: Unknown column 'quantidade_necessaria' in 'field list' | Linha: 223
+[2025-11-06 21:20:31] ==== CALLBACK RECEBIDO ====
+[2025-11-06 21:20:31] Raw payload: {"event":"payment.success","data":{"id":"ad4c0998-e2ea-4ee9-b3aa-cce62c06d589","amount":"1.00","reference":"3C4C580F917C"}}
+[2025-11-06 21:20:31] Evento: payment.success | Status interpretado: sucesso | Referência: 3C4C580F917C
+[2025-11-06 21:20:31] Atualizando status da transação para 'sucesso'...
+[2025-11-06 21:20:31] Transações afetadas: 1
+[2025-11-06 21:20:31] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-06 21:20:31] Pedido Temp encontrado → Usuário: 5 | Total: 1 | Pontos Gastos: 0
+[2025-11-06 21:20:31] Pedido final ID 227 inserido com sucesso.
+[2025-11-06 21:20:31] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-06 21:20:31] Iniciando gestão de fidelidade...
+[2025-11-06 21:20:31] Gestão de fidelidade concluída.
+[2025-11-06 21:20:31] Iniciando limpeza do carrinho ativo...
+[2025-11-06 21:20:31] Carrinho ativo #179 encontrado.
+[2025-11-06 21:20:31] Carrinho ativo #179 finalizado e limpo.
+[2025-11-06 21:20:31] Processo de callback finalizado e transação confirmada.
+[2025-11-06 21:28:15] ==== CALLBACK RECEBIDO ====
+[2025-11-06 21:28:15] Raw payload: {"event":"payment.success","data":{"id":"2fefbbdb-48c7-4737-bc4e-457fd3969516","amount":"1.00","reference":"3C30A4E33FD0"}}
+[2025-11-06 21:28:15] Evento: payment.success | Status interpretado: sucesso | Referência: 3C30A4E33FD0
+[2025-11-06 21:28:15] Atualizando status da transação para 'sucesso'...
+[2025-11-06 21:28:15] Transações afetadas: 1
+[2025-11-06 21:28:15] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-06 21:28:15] Pedido Temp encontrado → Usuário: 7 | Total: 1 | Pontos Gastos: 0
+[2025-11-06 21:28:15] Pedido final ID 228 inserido com sucesso.
+[2025-11-06 21:28:15] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-06 21:28:15] Iniciando gestão de fidelidade...
+[2025-11-06 21:28:15] Gestão de fidelidade concluída.
+[2025-11-06 21:28:15] Iniciando limpeza do carrinho ativo...
+[2025-11-06 21:28:15] Carrinho ativo #180 encontrado.
+[2025-11-06 21:28:15] Carrinho ativo #180 finalizado e limpo.
+[2025-11-06 21:28:15] Processo de callback finalizado e transação confirmada.
+[2025-11-12 13:19:45] ==== CALLBACK RECEBIDO ====
+[2025-11-12 13:19:45] Raw payload: 
+[2025-11-12 13:19:45] ERRO: Nenhum payload recebido.
+[2025-11-12 13:40:30] ==== CALLBACK RECEBIDO ====
+[2025-11-12 13:40:30] Raw payload: {"event":"payment.success","data":{"id":"46b82d3e-9282-45ef-9bda-5ce90a8c799e","amount":"1.10","reference":"53873CDBFF54"}}
+[2025-11-12 13:40:30] Evento: payment.success | Status interpretado: sucesso | Referência: 53873CDBFF54
+[2025-11-12 13:40:30] Atualizando status da transação para 'sucesso'...
+[2025-11-12 13:40:30] Transações afetadas: 1
+[2025-11-12 13:40:30] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-12 13:40:30] Pedido Temp encontrado → Usuário: 5 | Total: 1.1 | Pontos Gastos: 0
+[2025-11-12 13:40:30] Pedido final ID 230 inserido com sucesso.
+[2025-11-12 13:40:30] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-12 13:40:30] Iniciando gestão de fidelidade...
+[2025-11-12 13:40:30] Gestão de fidelidade concluída.
+[2025-11-12 13:40:30] Iniciando limpeza do carrinho ativo...
+[2025-11-12 13:40:30] Carrinho ativo #181 encontrado.
+[2025-11-12 13:40:30] Carrinho ativo #181 finalizado e limpo.
+[2025-11-12 13:40:30] Processo de callback finalizado e transação confirmada.
+[2025-11-14 09:04:03] ==== CALLBACK RECEBIDO ====
+[2025-11-14 09:04:03] Raw payload: {"event":"payment.success","data":{"id":"3ad4f877-090e-4d27-bdfe-109f92ce1cad","amount":"1.00","reference":"0DA9F8DEBC97"}}
+[2025-11-14 09:04:03] Evento: payment.success | Status interpretado: sucesso | Referência: 0DA9F8DEBC97
+[2025-11-14 09:04:03] Atualizando status da transação para 'sucesso'...
+[2025-11-14 09:04:03] Transações afetadas: 1
+[2025-11-14 09:04:03] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-14 09:04:03] Pedido Temp encontrado → Usuário: 5 | Total: 1 | Pontos Gastos: 0
+[2025-11-14 09:04:03] Pedido final ID 231 inserido com sucesso.
+[2025-11-14 09:04:03] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-14 09:04:03] Iniciando gestão de fidelidade...
+[2025-11-14 09:04:03] Gestão de fidelidade concluída.
+[2025-11-14 09:04:03] Iniciando limpeza do carrinho ativo...
+[2025-11-14 09:04:03] Carrinho ativo #182 encontrado.
+[2025-11-14 09:04:03] Carrinho ativo #182 finalizado e limpo.
+[2025-11-14 09:04:03] Processo de callback finalizado e transação confirmada.
+[2025-11-14 09:30:41] ==== CALLBACK RECEBIDO ====
+[2025-11-14 09:30:41] Raw payload: {"event":"payment.failed","data":{"id":"ba74ff82-9aef-474b-876c-91a7189e045b","amount":"1.10","reference":"05A2E4E7A882"}}
+[2025-11-14 09:30:41] Evento: payment.failed | Status interpretado: falhou | Referência: 05A2E4E7A882
+[2025-11-14 09:30:41] Atualizando status da transação para 'falhou'...
+[2025-11-14 09:30:41] Transações afetadas: 1
+[2025-11-14 09:30:41] Transação 05A2E4E7A882 falhou. Nenhuma ação de pedido final tomada.
+[2025-11-14 09:30:41] Processo de callback finalizado e transação confirmada.
+[2025-11-14 09:36:41] ==== CALLBACK RECEBIDO ====
+[2025-11-14 09:36:41] Raw payload: {"event":"payment.success","data":{"id":"de9379a7-c7ab-481c-874f-0b6f49ad0b82","amount":"1.10","reference":"33E2E343E607"}}
+[2025-11-14 09:36:41] Evento: payment.success | Status interpretado: sucesso | Referência: 33E2E343E607
+[2025-11-14 09:36:41] Atualizando status da transação para 'sucesso'...
+[2025-11-14 09:36:41] Transações afetadas: 1
+[2025-11-14 09:36:41] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-14 09:36:41] Pedido Temp encontrado → Usuário: 5 | Total: 1.1 | Pontos Gastos: 0
+[2025-11-14 09:36:41] Pedido final ID 232 inserido com sucesso.
+[2025-11-14 09:36:41] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-14 09:36:41] Iniciando gestão de fidelidade...
+[2025-11-14 09:36:41] Gestão de fidelidade concluída.
+[2025-11-14 09:36:41] Iniciando limpeza do carrinho ativo...
+[2025-11-14 09:36:41] Carrinho ativo #183 encontrado.
+[2025-11-14 09:36:41] Carrinho ativo #183 finalizado e limpo.
+[2025-11-14 09:36:41] Processo de callback finalizado e transação confirmada.
+[2025-11-18 13:00:45] ==== CALLBACK RECEBIDO ====
+[2025-11-18 13:00:45] Raw payload: {"event":"payment.success","data":{"id":"aa63706e-52f6-4781-b59b-4383b32338f6","amount":"1.00","reference":"59C88D113466"}}
+[2025-11-18 13:00:45] Evento: payment.success | Status interpretado: sucesso | Referência: 59C88D113466
+[2025-11-18 13:00:45] Atualizando status da transação para 'sucesso'...
+[2025-11-18 13:00:45] Transações afetadas: 1
+[2025-11-18 13:00:45] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-18 13:00:45] Pedido Temp encontrado → Usuário: 5 | Total: 1 | Pontos Gastos: 0
+[2025-11-18 13:00:45] Pedido final ID 242 inserido com sucesso.
+[2025-11-18 13:00:45] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-18 13:00:45] Iniciando gestão de fidelidade...
+[2025-11-18 13:00:45] Gestão de fidelidade concluída.
+[2025-11-18 13:00:45] Iniciando limpeza do carrinho ativo...
+[2025-11-18 13:00:45] Carrinho ativo #184 encontrado.
+[2025-11-18 13:00:45] Carrinho ativo #184 finalizado e limpo.
+[2025-11-18 13:00:45] Processo de callback finalizado e transação confirmada.
+[2025-11-18 13:07:55] ==== CALLBACK RECEBIDO ====
+[2025-11-18 13:07:55] Raw payload: {"event":"payment.success","data":{"id":"ddfd0616-0cdd-462c-a546-e1a86aefc9ba","amount":"1.10","reference":"02902C4B84EE"}}
+[2025-11-18 13:07:55] Evento: payment.success | Status interpretado: sucesso | Referência: 02902C4B84EE
+[2025-11-18 13:07:55] Atualizando status da transação para 'sucesso'...
+[2025-11-18 13:07:55] Transações afetadas: 1
+[2025-11-18 13:07:55] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-18 13:07:55] Pedido Temp encontrado → Usuário: 5 | Total: 1.1 | Pontos Gastos: 0
+[2025-11-18 13:07:55] Pedido final ID 243 inserido com sucesso.
+[2025-11-18 13:07:55] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-18 13:07:55] Iniciando gestão de fidelidade...
+[2025-11-18 13:07:55] Gestão de fidelidade concluída.
+[2025-11-18 13:07:55] Iniciando limpeza do carrinho ativo...
+[2025-11-18 13:07:55] Carrinho ativo #185 encontrado.
+[2025-11-18 13:07:55] Carrinho ativo #185 finalizado e limpo.
+[2025-11-18 13:07:55] Processo de callback finalizado e transação confirmada.
+[2025-11-18 13:18:48] ==== CALLBACK RECEBIDO ====
+[2025-11-18 13:18:48] Raw payload: {"event":"payment.success","data":{"id":"37dfba85-cf50-4503-b3cd-f42f1abfabcf","amount":"1.00","reference":"87D9D465276C"}}
+[2025-11-18 13:18:48] Evento: payment.success | Status interpretado: sucesso | Referência: 87D9D465276C
+[2025-11-18 13:18:48] Atualizando status da transação para 'sucesso'...
+[2025-11-18 13:18:48] Transações afetadas: 1
+[2025-11-18 13:18:48] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-18 13:18:48] Pedido Temp encontrado → Usuário: 5 | Total: 1 | Pontos Gastos: 0
+[2025-11-18 13:18:48] Pedido final ID 244 inserido com sucesso.
+[2025-11-18 13:18:48] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-18 13:18:48] Iniciando gestão de fidelidade...
+[2025-11-18 13:18:48] Gestão de fidelidade concluída.
+[2025-11-18 13:18:48] Iniciando limpeza do carrinho ativo...
+[2025-11-18 13:18:48] Carrinho ativo #186 encontrado.
+[2025-11-18 13:18:48] Carrinho ativo #186 finalizado e limpo.
+[2025-11-18 13:18:48] Processo de callback finalizado e transação confirmada.
+[2025-11-18 22:13:56] ==== CALLBACK RECEBIDO ====
+[2025-11-18 22:13:56] Raw payload: {"event":"payment.success","data":{"id":"be7c65f4-2ccf-4fec-932a-545631cd408c","amount":"1.10","reference":"AE40B2E2677B"}}
+[2025-11-18 22:13:56] Evento: payment.success | Status interpretado: sucesso | Referência: AE40B2E2677B
+[2025-11-18 22:13:56] Atualizando status da transação para 'sucesso'...
+[2025-11-18 22:13:56] Transações afetadas: 1
+[2025-11-18 22:13:56] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-18 22:13:56] Pedido Temp encontrado → Usuário: 5 | Total: 1.1 | Pontos Gastos: 0
+[2025-11-18 22:13:56] Pedido final ID 246 inserido com sucesso.
+[2025-11-18 22:13:56] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-18 22:13:56] Iniciando gestão de fidelidade...
+[2025-11-18 22:13:56] Gestão de fidelidade concluída.
+[2025-11-18 22:13:56] Iniciando limpeza do carrinho ativo...
+[2025-11-18 22:13:56] Carrinho ativo #187 encontrado.
+[2025-11-18 22:13:56] Carrinho ativo #187 finalizado e limpo.
+[2025-11-18 22:13:56] Processo de callback finalizado e transação confirmada.

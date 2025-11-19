@@ -1,0 +1,53 @@
+[2025-10-28 21:45:20] Callback recebido: 
+[2025-10-28 21:46:11] Callback recebido: 
+[2025-10-28 22:09:00] Callback recebido: {
+  "event": "payment.success",
+  "data": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "amount": 100.50,
+    "reference": "INV2024001"
+  }
+}
+
+[2025-10-28 22:09:00] Status atualizado: INV2024001 → sucesso
+[2025-10-28 22:11:48] Callback recebido: 
+[2025-10-28 22:37:55] Requisição /payments: {"amount":1,"reference":"PED000207","description":"Pagamento do pedido #PED000207","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=PED000207","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-28 22:37:55] Resposta: {"status":"success","data":{"id":"a3664c86-9bfe-483d-8075-b0a413108675","amount":"1.00","reference":"PED000207","checkout_url":"https:\/\/paysuite.tech\/checkout\/a3664c86-9bfe-483d-8075-b0a413108675"}}
+[2025-10-28 22:38:27] Callback recebido: {"event":"payment.success","data":{"id":"a3664c86-9bfe-483d-8075-b0a413108675","amount":"1.00","reference":"PED000207"}}
+[2025-10-28 22:38:27] Status atualizado: PED000207 → sucesso (Pedido: 207)
+[2025-10-28 22:46:19] Requisição /payments: {"amount":101,"reference":"PED000208","description":"Pagamento do pedido #PED000208","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=PED000208","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-28 22:46:19] Resposta: {"status":"success","data":{"id":"463c0868-4b34-4a7e-876b-fb7aad0ef64e","amount":"101.00","reference":"PED000208","checkout_url":"https:\/\/paysuite.tech\/checkout\/463c0868-4b34-4a7e-876b-fb7aad0ef64e"}}
+[2025-10-28 22:59:16] Requisição /payments: {"amount":1,"reference":"TX1761688754999","description":"Pagamento de pedido Restaurante","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-28 22:59:16] Resposta: {"status":"success","data":{"id":"483898ab-df66-4858-b42d-946b7750baaf","amount":"1.00","reference":"TX1761688754999","checkout_url":"https:\/\/paysuite.tech\/checkout\/483898ab-df66-4858-b42d-946b7750baaf"}}
+[2025-10-28 23:00:04] Requisição /payments: {"amount":1,"reference":"TX1761688801514","description":"Pagamento de pedido Restaurante","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-28 23:00:04] Resposta: {"status":"success","data":{"id":"8b7538f5-5875-4a83-87fd-055b69d2a5ea","amount":"1.00","reference":"TX1761688801514","checkout_url":"https:\/\/paysuite.tech\/checkout\/8b7538f5-5875-4a83-87fd-055b69d2a5ea"}}
+[2025-10-28 23:02:06] Requisição /payments: {"amount":1,"reference":"TX1761688924945","description":"Pagamento de pedido Restaurante","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-28 23:02:06] Resposta: {"status":"success","data":{"id":"04781d7f-754b-48fc-b7b4-c2449f0c06fc","amount":"1.00","reference":"TX1761688924945","checkout_url":"https:\/\/paysuite.tech\/checkout\/04781d7f-754b-48fc-b7b4-c2449f0c06fc"}}
+[2025-10-29 06:01:07] Requisição /payments: {"amount":1,"reference":"TX1761714064739","description":"Pagamento de pedido Restaurante","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:01:07] Resposta: {"status":"success","data":{"id":"058a297e-234a-47fd-95ba-34e46a89643d","amount":"1.00","reference":"TX1761714064739","checkout_url":"https:\/\/paysuite.tech\/checkout\/058a297e-234a-47fd-95ba-34e46a89643d"}}
+[2025-10-29 06:04:29] Requisição /payments: {"amount":1,"reference":"TX1761714266225","description":"Pagamento de pedido Restaurante","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:04:29] Resposta: {"status":"success","data":{"id":"f6723602-8fad-4df8-bb15-88501f1827b3","amount":"1.00","reference":"TX1761714266225","checkout_url":"https:\/\/paysuite.tech\/checkout\/f6723602-8fad-4df8-bb15-88501f1827b3"}}
+[2025-10-29 06:04:57] Requisição /payments: {"amount":1,"reference":"TX1761714295589","description":"Pagamento de pedido Restaurante","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:04:57] Resposta: {"status":"success","data":{"id":"31898b50-6044-4c18-8f5d-30671ef351fe","amount":"1.00","reference":"TX1761714295589","checkout_url":"https:\/\/paysuite.tech\/checkout\/31898b50-6044-4c18-8f5d-30671ef351fe"}}
+[2025-10-29 06:12:44] Requisição /payments: {"amount":1,"reference":"TX61761714761","description":"Pagamento do carrinho do usu\u00e1rio #6","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=TX61761714761","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:12:44] Resposta: {"status":"success","data":{"id":"d0076652-888b-4402-b936-1f861fd05c8c","amount":"1.00","reference":"TX61761714761","checkout_url":"https:\/\/paysuite.tech\/checkout\/d0076652-888b-4402-b936-1f861fd05c8c"}}
+[2025-10-29 06:13:07] Requisição /payments: {"amount":1,"reference":"TX61761714785","description":"Pagamento do carrinho do usu\u00e1rio #6","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=TX61761714785","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:13:07] Resposta: {"status":"success","data":{"id":"ecb6d15f-ea56-4d13-a717-e83328c836f0","amount":"1.00","reference":"TX61761714785","checkout_url":"https:\/\/paysuite.tech\/checkout\/ecb6d15f-ea56-4d13-a717-e83328c836f0"}}
+[2025-10-29 06:34:57] Requisição /payments: {"amount":1,"reference":"TX61761716094","description":"Pagamento do carrinho do usu\u00e1rio #6","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=TX61761716094","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:34:57] Resposta: {"status":"success","data":{"id":"b3a546ff-5252-4c47-ae4c-ea45a345c4ce","amount":"1.00","reference":"TX61761716094","checkout_url":"https:\/\/paysuite.tech\/checkout\/b3a546ff-5252-4c47-ae4c-ea45a345c4ce"}}
+[2025-10-29 06:36:32] Requisição /payments: {"amount":1,"reference":"TX61761716189","description":"Pagamento do carrinho do usu\u00e1rio #6","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=TX61761716189","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:36:32] Resposta: {"status":"success","data":{"id":"c72749a0-f75f-4541-b26f-fc11b384c78d","amount":"1.00","reference":"TX61761716189","checkout_url":"https:\/\/paysuite.tech\/checkout\/c72749a0-f75f-4541-b26f-fc11b384c78d"}}
+[2025-10-29 06:39:05] Requisição /payments: {"amount":1,"reference":"TX61761716343","description":"Pagamento do carrinho do usu\u00e1rio #6","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=TX61761716343","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:39:05] Resposta: {"status":"success","data":{"id":"0ad8488a-0315-4793-90ad-6667da05ae4d","amount":"1.00","reference":"TX61761716343","checkout_url":"https:\/\/paysuite.tech\/checkout\/0ad8488a-0315-4793-90ad-6667da05ae4d"}}
+[2025-10-29 06:46:59] Requisição /payments: {"amount":1,"reference":"TX6901AA512FF5E","description":"Pagamento de pedido no Restaurante","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:46:59] Resposta: {"status":"success","data":{"id":"af52260d-dd8b-4a8f-99f8-69c521ac1da6","amount":"1.00","reference":"TX6901AA512FF5E","checkout_url":"https:\/\/paysuite.tech\/checkout\/af52260d-dd8b-4a8f-99f8-69c521ac1da6"}}
+[2025-10-29 06:47:36] Requisição /payments: {"amount":1,"reference":"TX6901AA768812E","description":"Pagamento de pedido no Restaurante","return_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php","callback_url":"https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php"}
+[2025-10-29 06:47:36] Resposta: {"status":"success","data":{"id":"76935197-c643-491a-98c3-055b5b4f8c9c","amount":"1.00","reference":"TX6901AA768812E","checkout_url":"https:\/\/paysuite.tech\/checkout\/76935197-c643-491a-98c3-055b5b4f8c9c"}}
+[2025-10-29 07:15:37] Callback recebido: {"event":"payment.success","data":{"id":"228a5bfc-ebb5-4924-8eac-12f1806029db","amount":"1.00","reference":"3A3A4A081BAD"}}
+[2025-10-29 07:15:37] Erro callback: Carrinho não encontrado para usuário 6
+[2025-10-29 07:20:21] Callback recebido: {"event":"payment.success","data":{"id":"6b5e41fb-57b9-4780-ae2b-2e9a7ba270c2","amount":"1.00","reference":"3C8D46666248"}}
+[2025-10-29 07:20:21] Erro callback: Carrinho não encontrado para usuário 6
+[2025-10-29 07:41:05] Callback recebido: {"event":"payment.success","data":{"id":"5972d2f2-07fe-4048-8586-1a2eaabb51bd","amount":"1.00","reference":"955A0C5D7FCD"}}
+[2025-10-29 07:41:05] Erro callback: Carrinho não encontrado para usuário 6
+[2025-10-29 07:42:19] Callback recebido: {"event":"payment.success","data":{"id":"60c5fe08-3c91-4b1b-9672-9218061c3ae6","amount":"1.00","reference":"49558E023FD7"}}
+[2025-10-29 07:42:19] Erro callback: Carrinho não encontrado para usuário 6

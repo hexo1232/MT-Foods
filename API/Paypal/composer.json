@@ -1,0 +1,20 @@
+{
+    "name": "loja-virtual/paypal",
+    "description": "Integraçao PayPal para Loja Virtual",
+    "type": "library",
+    "require": {
+        "paypal/paypal-checkout-sdk": "^1.0"
+    },
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "LojaVirtual\\Paypal\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matias Matavel"
+        }
+    ],
+    "minimum-stability": "stable"
+}

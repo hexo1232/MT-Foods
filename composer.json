@@ -1,0 +1,11 @@
+{
+    "require": {
+    "cboden/ratchet": "^0.4.4",
+    "dompdf/dompdf": "^2.0",
+    "paypal/paypal-checkout-sdk": "^1.0",
+    "cybersource/rest-client-php": "0.0.43",
+        "textalk/websocket": "^1.5",
+        "vlucas/phpdotenv": "^5.6",
+        "phpmailer/phpmailer": "^6.11"
+  }
+}
