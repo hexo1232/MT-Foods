@@ -35,8 +35,7 @@ function iniciarPagamentoPaySuite($id_usuario, $valor, $metodo, $telefone, $emai
     $endpoint = "https://paysuite.tech/api/v1/payments";
     
     // O $returnUrl já vem formatado de finalizar_pedido.php
-    $callbackUrl = "https://undebated-man-unrelating.ngrok-free.dev/Restaurante/API/paysuite_callback.php";
-
+  $callbackUrl = "https://web-production-51ac.up.railway.app/API/paysuite_callback.php";
     // Monta payload da PaySuite
     $payload = [
         "amount" => $valor,
