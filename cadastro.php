@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
            <link rel="stylesheet" href="css/admin.css">
     
    <meta name="viewport"  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+       <script src="js/sidebar.js"></script>
     <title>Cadastro de Usuário</title>
     <style>
         body {
@@ -136,12 +136,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-<sidebar class="sidebar">
+<button class="menu-btn">☰</button>
 
+<!-- Overlay -->
+<div class="sidebar-overlay"></div>
+
+        <sidebar class="sidebar">
+           <br><br>
+        
             <a href="login.php">Voltar ao Login</a>
-           
-</sidebar>
+ 
+            <!-- ===== PERFIL NO FUNDO DA SIDEBAR ===== -->
 
+        </sidebar>
 
 
     <?php if ($mensagem): ?>
