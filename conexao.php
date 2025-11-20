@@ -4,7 +4,7 @@
 $host = getenv('DB_HOST') ?: "turntable.proxy.rlwy.net";
 $usuario = getenv('DB_USER') ?: "root";
 $password = getenv('DB_PASSWORD') ?: "nnttbKnlsepXHfAwsDOuVOlkkGvngAkN";
-$bd = getenv('DB_NAME') ?: "railway";
+$bd = getenv('DB_NAME') ?: "restaurante";
 $port = getenv('DB_PORT') ?: "56276"; // Atenção: Porta deve ser INT se possível, mas string funciona na maioria
 
 // Ordem correta dos parâmetros: Host, User, Pass, DB, Port
