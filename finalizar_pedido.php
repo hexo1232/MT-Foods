@@ -1,4 +1,5 @@
 <?php
+ob_start();
 
 require_once "conexao.php";
 include "verifica_login_opcional.php";
@@ -363,6 +364,7 @@ $stmt_temp->bind_param("isiidissssi", // CORRIGIDO: Agora tem 8 caracteres
         echo "<p style='color:red;'>Erro: " . htmlspecialchars($e->getMessage()) . "</p>";
     }
 }
+    ob_end_flush();
 ?>
 
 <!DOCTYPE html>
