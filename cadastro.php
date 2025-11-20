@@ -1,87 +1,68 @@
-<?php
-include "conexao.php";
 
-if (session_status() === PHP_SESSION_NONE) session_start();
-
-// 🔄 AJAX: Carregar cidades da província
-if (isset($_GET['ajax']) && $_GET['ajax'] === 'cidades') {
-    $idprovincia = $_GET['provincia'] ?? null;
-
-    if (!$idprovincia) exit;
-
-    $sql = "SELECT idcidade, nome_cidade FROM cidade WHERE idprovincia = ?";
-    $stmt = $conexao->prepare($sql);
-    $stmt->bind_param("i", $idprovincia);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    echo '<option value="">Cidade</option>';
-    while ($row = $result->fetch_assoc()) {
-        echo '<option value="' . $row['idcidade'] . '">' . htmlspecialchars($row['nome_cidade']) . '</option>';
-    }
-    exit;
-}
-
-$províncias = $conexao->query("SELECT idprovincia, nome_provincia FROM provincia");
+<?php 
 $mensagem = "";
-$redirecionar = false; // sinaliza se deve redirecionar após o cadastro
+$redirecionar = false;
 
-// 🧾 Processa o cadastro
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    include "conexao.php";
+
     $nome     = htmlspecialchars(trim($_POST['nome']));
     $apelido  = htmlspecialchars(trim($_POST['apelido']));
-    $numero   = htmlspecialchars(trim($_POST['numero']));
+    $telefone = htmlspecialchars(trim($_POST['telefone']));
     $email    = htmlspecialchars(trim($_POST['email']));
     $senha    = trim($_POST['senha']);
-    $conf     = trim($_POST['conf']);
-    $idcidade = $_POST['cidade'];
-    $idprov   = $_POST['provincia'];
-    $perfil   = 3;
+    $conf     = htmlspecialchars(trim($_POST['conf']));
 
-    if (empty($nome) || empty($apelido) || empty($numero) || empty($email) || empty($senha) || empty($conf) || empty($idcidade) || empty($idprov)) {
+    // Verificação dos campos obrigatórios
+    if (empty($nome) || empty($apelido) || empty($telefone) || empty($email) || empty($senha) || empty($conf)) {
         $mensagem = "⚠️ Todos os campos são obrigatórios!";
-    } elseif ($senha !== $conf) {
+    } 
+    else if ($senha != $conf) {
         $mensagem = "❌ A senha e a confirmação não coincidem.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    } 
+    else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $mensagem = "❌ Email inválido.";
-    } elseif (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/', $senha)) {
+    } 
+    elseif (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/', $senha)) {
         $mensagem = "❌ A senha deve ter pelo menos 6 caracteres, uma letra maiúscula, uma minúscula e um número.";
-    } else {
-        // 🔍 Verificar se o email já está cadastrado
-        $check = $conexao->prepare("SELECT id_usuario FROM usuario WHERE email = ?");
-        $check->bind_param("s", $email);
-        $check->execute();
-        $res = $check->get_result();
+    }
+    else { 
+        // Criptografa a senha definida pelo usuário
+        $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-        if ($res->num_rows > 0) {
-            $mensagem = "❌ Este email já está cadastrado.";
+        // Ao se cadastrar escolhendo sua própria senha, primeira_senha = 0
+        $sql = "INSERT INTO usuario (nome, apelido, telefone, email, senha_hash, idperfil, primeira_senha) 
+                VALUES (?, ?, ?, ?, ?, 3, 0)";
+        
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param("sssss", $nome, $apelido, $telefone, $email, $senha_hash);
+
+        if ($stmt->execute()) {
+            $mensagem = "✅ Cadastro realizado com sucesso! Redirecionando para a tela de login...";
+            $redirecionar = true;
         } else {
-            $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-
-           $stmt = $conexao->prepare("
-    INSERT INTO usuario 
-    (nome, apelido, telefone, email, senha_hash, idprovincia, idcidade, idperfil, data_cadastro) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
-");
-$stmt->bind_param("ssssssii", $nome, $apelido, $numero, $email, $senha_hash, $idprov, $idcidade, $perfil);
-
-            if ($stmt->execute()) {
-                $mensagem = "✅ Cadastro realizado com sucesso! Redirecionando para a tela de login...";
-                $redirecionar = true;
-            } else {
-                $mensagem = "❌ Erro ao cadastrar: " . $stmt->error;
-            }
+            $mensagem = "❌ Erro ao cadastrar: " . $conexao->error;
         }
+
+        $stmt->close();
+        $conexao->close();
     }
 }
 ?>
 
 
+
+
 <!DOCTYPE html>
-<html lang="pt">
+<html>
 <head>
+    <title>Cadastro</title>
     <meta charset="UTF-8">
-    <meta name="viewport"  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+         <script src="logout_auto.js"></script>
+          <script src="js/mostrarSenha.js"></script>
+           <link rel="stylesheet" href="css/admin.css">
+    
+   <meta name="viewport"  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>Cadastro de Usuário</title>
     <style>
@@ -122,7 +103,7 @@ $stmt->bind_param("ssssssii", $nome, $apelido, $numero, $email, $senha_hash, $id
         button {
             width: 100%;
             padding: 12px;
-            background-color: #0066cc;
+            background-color: #f1bf1b;
             color: white;
             border: none;
             border-radius: 5px;
@@ -131,7 +112,7 @@ $stmt->bind_param("ssssssii", $nome, $apelido, $numero, $email, $senha_hash, $id
         }
 
         button:hover {
-            background-color: #004a99;
+            background-color: #cfa61dff;
         }
 
         .mensagem {
@@ -152,73 +133,65 @@ $stmt->bind_param("ssssssii", $nome, $apelido, $numero, $email, $senha_hash, $id
             color: #721c24;
         }
     </style>
-
-    <script>
-        function carregarCidades() {
-            const provincia = document.getElementById("provincia").value;
-            const cidadeSelect = document.getElementById("cidade");
-
-            if (!provincia) {
-                cidadeSelect.innerHTML = '<option value="">Cidade</option>';
-                cidadeSelect.disabled = true;
-                return;
-            }
-
-            fetch(`?ajax=cidades&provincia=${provincia}`)
-                .then(res => res.text())
-                .then(data => {
-                    cidadeSelect.innerHTML = data;
-                    cidadeSelect.disabled = false;
-                })
-                .catch(() => alert("Erro ao carregar cidades."));
-        }
-    </script>
 </head>
 <body>
 
-    <h2>Cadastro de Usuário</h2>
+<sidebar class="sidebar">
+
+            <a href="login.php">Voltar ao Login</a>
+           
+</sidebar>
+
+
 
     <?php if ($mensagem): ?>
         <div class="mensagem <?= str_contains($mensagem, '✅') ? 'success' : 'error' ?>">
             <?= $mensagem ?>
         </div>
-    <?php endif; ?>
+    <?php endif; ?> <br><br>
 
+ <h2>Cadastro de Usuário</h2>
     <form method="post" action="">
         <label>Nome:</label>
-        <input type="text" name="nome" required>
+        <input type="text" name="nome" required><br>
 
         <label>Apelido:</label>
-        <input type="text" name="apelido" required>
+        <input type="text" name="apelido" required><br>
 
         <label>Telefone:</label>
-        <input type="tel" name="numero" required placeholder="84/87/83*******" pattern="8[234567]\d{7}" maxlength="9">
-
-        <label>Email:</label>
-        <input type="email" name="email" required>
-
+        <input type="text" name="telefone" required placeholder="84/87/83 *******"><br>
         
-        <label>Província:</label>
-        <select name="provincia" id="provincia" onchange="carregarCidades()" required>
-            <option value="">Selecione a Província</option>
-            <?php while ($p = $províncias->fetch_assoc()) { ?>
-                <option value="<?= $p['idprovincia'] ?>"><?= htmlspecialchars($p['nome_provincia']) ?></option>
-            <?php } ?>
-        </select>
+   <label>Email:</label>
+        <input type="email" name="email" placeholder="xxx@gmail.com" required><br>
 
-        <label>Cidade:</label>
-        <select name="cidade" id="cidade" required disabled>
-            <option value="">Cidade</option>
-        </select>
+   <label>Senha:</label>
+        
 
-        <label>Senha:</label>
-        <input type="password" name="senha" required minlength="6">
-
-        <label>Confirme a Senha:</label>
-        <input type="password" name="conf" required minlength="6">
+             <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+    <input type="password" name="senha" class="campo-senha-nova" required
+           style="width: 100%; padding-right: 35px; box-sizing: border-box;">
+    <img src="icones/olho_fechado1.png"
+         alt="Mostrar nova senha"
+         class="toggle-senha"
+         data-target="campo-senha-nova"
+         style="position: absolute; right: 10px; cursor: pointer; width: 22px; opacity: 0.8;">
+  </div>
+           <label>Confirme a sua senha:</label>
 
 
-        <button type="submit">Cadastrar</button>
+         <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+    <input type="password" name="conf" class="campo-senha-confirmacao" required
+           style="width: 100%; padding-right: 35px; box-sizing: border-box;">
+    <img src="icones/olho_fechado1.png"
+         alt="Mostrar confirmação de senha"
+         class="toggle-senha"
+         data-target="campo-senha-confirmacao"
+         style="position: absolute; right: 10px; cursor: pointer; width: 22px; opacity: 0.8;">
+  </div><br><br>
+      
+        <button type="submit">Cadastrar-se</button><br><br>
+
+      
     </form>
 
     <?php if ($redirecionar): ?>
@@ -229,6 +202,7 @@ $stmt->bind_param("ssssssii", $nome, $apelido, $numero, $email, $senha_hash, $id
     }, 3000);
 </script>
 <?php endif; ?>
+
 
 </body>
 </html>
