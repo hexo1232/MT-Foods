@@ -19,3 +19,4 @@ function gerarCor($texto) {
 
 $corAvatar = gerarCor($nomeCompleto);
 ?>
+
