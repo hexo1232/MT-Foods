@@ -15,4 +15,10 @@ if ($conexao->connect_error) {
     error_log("Erro de conexão: " . $conexao->connect_error);
     die("Desculpe, estamos com problemas técnicos.");
 }
+
+// --- CORREÇÃO DO ERRO FATAL DE GROUP BY ---
+// Esta linha remove o modo restrito 'ONLY_FULL_GROUP_BY' da sessão atual.
+// Isso resolve o erro "Expression #3 ... contains nonaggregated column" no index.php.
+$conexao->query("SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
+
 ?>
