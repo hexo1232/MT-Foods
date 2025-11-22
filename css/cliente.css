@@ -932,14 +932,7 @@ font-weight: bold;
   color: var(--cor-texto);
 }
 
-/* .subtotal {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: var(--cor-sucesso);
-  margin: 15px 0;
-  opacity: 0;
-  animation: fadeInRight 0.5s ease 0.5s forwards;
-} */
+
 
 .acoes {
   margin-top: 15px;
@@ -3143,10 +3136,25 @@ body.dark-mode #darkToggle {
     height: 18px;
     padding: 3px;
   }
+
+    .card-ingrediente img {
+
+            width: 80px;
+            height: 80px;
+       
+        }
 }
 
 /* ======== RESPONSIVO EXTRA SMALL (Mobile pequeno) ======== */
 @media (max-width: 480px) {
+
+
+  .card-ingrediente img {
+
+            width: 80px;
+            height: 80px;
+       
+        }
   .topbar {
     height: 55px;
   }
@@ -3415,13 +3423,13 @@ body.dark-mode #darkToggle {
 }
 
 .icone{
-    height: 18px;
   width: 18px;
+  height: 18px; 
 }
 
 .icone2 {
-  width: 26px;
-  height: 26px;      /* garante mesma altura para alinhar com o texto */
+  width: 32px;
+  height: 32px;      /* garante mesma altura para alinhar com o texto */
   object-fit: contain;
   vertical-align: middle; /* alinha com texto */
 }
