@@ -374,3 +374,33 @@
 [2025-11-18 22:13:56] Carrinho ativo #187 encontrado.
 [2025-11-18 22:13:56] Carrinho ativo #187 finalizado e limpo.
 [2025-11-18 22:13:56] Processo de callback finalizado e transação confirmada.
+[2025-11-26 14:49:56] ==== CALLBACK RECEBIDO ====
+[2025-11-26 14:49:56] Raw payload: {"event":"payment.success","data":{"id":"9183b44e-fefa-42f5-9285-2377c412b3ec","amount":"1.00","reference":"5257FDE1B9EF"}}
+[2025-11-26 14:49:56] Evento: payment.success | Status interpretado: sucesso | Referência: 5257FDE1B9EF
+[2025-11-26 14:49:56] Atualizando status da transação para 'sucesso'...
+[2025-11-26 14:49:56] Transações afetadas: 1
+[2025-11-26 14:49:56] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-26 14:49:56] Pedido Temp encontrado → Usuário: 5 | Total: 1 | Pontos Gastos: 0
+[2025-11-26 14:49:56] Pedido final ID 280 inserido com sucesso.
+[2025-11-26 14:49:56] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-26 14:49:56] Iniciando gestão de fidelidade...
+[2025-11-26 14:49:56] Gestão de fidelidade concluída.
+[2025-11-26 14:49:56] Iniciando limpeza do carrinho ativo...
+[2025-11-26 14:49:56] Carrinho ativo #189 encontrado.
+[2025-11-26 14:49:56] Carrinho ativo #189 finalizado e limpo.
+[2025-11-26 14:49:56] Processo de callback finalizado e transação confirmada.
+[2025-11-26 14:54:57] ==== CALLBACK RECEBIDO ====
+[2025-11-26 14:54:57] Raw payload: {"event":"payment.success","data":{"id":"11ed9e24-7f05-4f35-9a55-d80bb9a7de59","amount":"1.10","reference":"32B45E6E705B"}}
+[2025-11-26 14:54:57] Evento: payment.success | Status interpretado: sucesso | Referência: 32B45E6E705B
+[2025-11-26 14:54:57] Atualizando status da transação para 'sucesso'...
+[2025-11-26 14:54:57] Transações afetadas: 1
+[2025-11-26 14:54:57] Pagamento bem-sucedido. Buscando dados do pedido temporário...
+[2025-11-26 14:54:57] Pedido Temp encontrado → Usuário: 5 | Total: 1.1 | Pontos Gastos: 0
+[2025-11-26 14:54:57] Pedido final ID 281 inserido com sucesso.
+[2025-11-26 14:54:57] Itens do pedido e personalizações inseridos. Estoque atualizado (Base + Extras).
+[2025-11-26 14:54:57] Iniciando gestão de fidelidade...
+[2025-11-26 14:54:57] Gestão de fidelidade concluída.
+[2025-11-26 14:54:57] Iniciando limpeza do carrinho ativo...
+[2025-11-26 14:54:57] Carrinho ativo #190 encontrado.
+[2025-11-26 14:54:57] Carrinho ativo #190 finalizado e limpo.
+[2025-11-26 14:54:57] Processo de callback finalizado e transação confirmada.

@@ -154,8 +154,12 @@ if (isset($_GET['id_pedido'])) {
             <div class="usuario-iniciais" style="background-color:<?= $corAvatar ?>;"><?= $iniciais ?></div>
             <div class="usuario-nome"><?= $nomeCompleto ?></div>
             <div class="menu-perfil" id="menuPerfil">
-              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">Editar Dados Pessoais</a>
-              <a href="alterar_senha2.php">Alterar Senha</a>
+              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">
+              <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+              Editar Dados Pessoais</a>
+              <a href="alterar_senha2.php">
+              <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">   
+              Alterar Senha</a>
               <a href="logout.php"><img class="iconelogout" src="icones/logout1.png"> Sair</a>
             </div>
           </div>
@@ -175,7 +179,7 @@ if (isset($_GET['id_pedido'])) {
 
   <ul class="sidebar-links">
       <?php if ($id_usuario): ?>
-        <a href="monitorar_pedido.php">Continuar a ver Pedidos</a>
+             <li> <a href="monitorar_pedido.php"><img class="icone2" src="icones/voltar1.png" alt="Logout" title="voltar"> Continuar a ver Pedidos</a>     </li> 
       <?php endif; ?></ul>
 
   <?php if ($usuario): ?>
@@ -185,7 +189,8 @@ if (isset($_GET['id_pedido'])) {
       <div id="sidebarProfileDropdown" class="sidebar-profile-dropdown">
     <div id="sidebarProfileDropdown" class="sidebar-profile-dropdown">
       <a href='editarusuario.php?id_usuario=<?= $usuario["id_usuario"] ?>'>
-           <img class="icone" src="icones/user1.png" alt="Editar" title="Editar"> Editar Dados Pessoais
+           <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">
+            Editar Dados Pessoais
       </a>
 
       <a href="alterar_senha2.php">
@@ -398,9 +403,15 @@ if (isset($_GET['id_pedido'])) {
             <div class="usuario-iniciais" style="background-color:<?= $corAvatar ?>;"><?= $iniciais ?></div>
             <div class="usuario-nome"><?= $nomeCompleto ?></div>
             <div class="menu-perfil" id="menuPerfil">
-              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">Editar Dados Pessoais</a>
-              <a href="alterar_senha2.php">Alterar Senha</a>
-              <a href="logout.php"><img class="iconelogout" src="icones/logout1.png"> Sair</a>
+              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">
+              <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+              Editar Dados Pessoais</a>
+              <a href="alterar_senha2.php">
+              <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">   
+              Alterar Senha</a>
+              <a href="logout.php"><img class="iconelogout" src="icones/logout1.png"> 
+              
+              Sair</a>
             </div>
           </div>
         </div>

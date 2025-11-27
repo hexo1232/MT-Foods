@@ -2,51 +2,11 @@
 include "conexao.php";
 require_once "require_login.php";
 include "usuario_info.php";
-// ===============================================
-// NOVO CÓDIGO PARA GESTÃO DE ALERTA DE INGREDIENTES
-// ===============================================
-
-// 1. Busca todos os ingredientes com estoque baixo
-$alerta_sql = "SELECT id_ingrediente, nome_ingrediente, quantidade_estoque FROM ingrediente WHERE quantidade_estoque <= 20 ORDER BY quantidade_estoque ASC";
-$alerta_resultado = $conexao->query($alerta_sql);
-
-$ingredientes_alerta = [];
-$alerta_vermelho_presente = false;
-$alerta_laranja_presente = false;
-
-if ($alerta_resultado->num_rows > 0) {
-    while ($ing = $alerta_resultado->fetch_assoc()) {
-        $nivel = '';
-        if ($ing['quantidade_estoque'] < 10) {
-            $nivel = 'vermelho';
-            $alerta_vermelho_presente = true;
-        } elseif ($ing['quantidade_estoque'] <= 20) {
-            $nivel = 'laranja';
-            $alerta_laranja_presente = true;
-        }
-        
-        if ($nivel) {
-            $ingredientes_alerta[] = [
-                'id' => $ing['id_ingrediente'],
-                'nome' => $ing['nome_ingrediente'],
-                'estoque' => $ing['quantidade_estoque'],
-                'nivel' => $nivel
-            ];
-        }
-    }
-}
-
-// 2. Persiste o estado do alerta na sessão (para o popup)
-if (!empty($ingredientes_alerta)) {
-    // Armazena a lista de ingredientes em alerta na sessão
-    $_SESSION['alerta_estoque_ingredientes'] = $ingredientes_alerta;
-} else {
-    // Limpa a sessão se não houver mais alertas
-    unset($_SESSION['alerta_estoque_ingredientes']);
-}
 
 // ===============================================
-// FIM NOVO CÓDIGO PARA GESTÃO DE ALERTA DE INGREDIENTES
+// NOTA: Removemos a lógica de salvar em SESSÃO aqui.
+// O Dashboard já cuida do alerta via AJAX. 
+// Aqui focamos apenas na visualização da lista.
 // ===============================================
 
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -57,6 +17,8 @@ if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
     exit;
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -67,73 +29,19 @@ if (!isset($_SESSION['usuario'])) {
 
     <title>Lista de ingredientes</title>
     
-        <script src="logout_auto.js"></script>
+    <script src="logout_auto.js"></script>
 
     <link rel="stylesheet" href="css/admin.css">
-          <script src="js/darkmode2.js"></script>
-            <script src="js/sidebar.js"></script>
-            <script src="js/dropdown2.js"></script>
+    <script src="js/darkmode2.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/dropdown2.js"></script>
 
-            <style>
-/* NOVO CÓDIGO CSS */
-.card.alerta-laranja {
-    border: 3px solid #ff9900 !important; /* Laranja mais escuro */
-}
-.card.alerta-vermelho {
-    border: 3px solid #cc0000 !important; /* Vermelho forte */
-}
 
-/* Estilo para o Toast/Popup */
-.toast-ingrediente {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    padding: 15px 25px;
-    border-radius: 8px;
-    color: white;
-    font-size: 14px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: opacity 0.5s, transform 0.5s;
-    transform: translateX(100%);
-}
-.toast-ingrediente.show {
-    opacity: 1;
-    transform: translateX(0);
-}
-.toast-ingrediente.laranja {
-    background-color: #ff9900;
-}
-.toast-ingrediente.vermelho {
-    background-color: #cc0000;
-}
-.toast-ingrediente ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 5px;
-}
-.toast-ingrediente li {
-    margin-top: 3px;
-    font-weight: bold;
-}
-.toast-ingrediente .close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    float: right;
-    margin-left: 10px;
-}
-/* FIM NOVO CÓDIGO CSS */
-</style>
 </head>
 <body>
 
 <button class="menu-btn">☰</button>
 
-<!-- Overlay -->
 <div class="sidebar-overlay"></div>
 
 <sidebar class="sidebar">
@@ -144,8 +52,7 @@ if (!isset($_SESSION['usuario'])) {
             <a href="cadastroingrediente.php">Cadastrar novo Ingrediente</a>
             <a href="ver_categoria_ingrediente.php">Ver categorias de ingredientes</a>
    
-            <!-- ===== PERFIL NO FUNDO DA SIDEBAR ===== -->
-<div class="sidebar-user-wrapper">
+            <div class="sidebar-user-wrapper">
 
     <div class="sidebar-user" id="usuarioDropdown">
 
@@ -158,7 +65,6 @@ if (!isset($_SESSION['usuario'])) {
             <div class="usuario-apelido"><?= $apelido ?></div>
         </div>
 
-        <!-- DROPDOWN PARA CIMA -->
         <div class="usuario-menu" id="menuPerfil">
             <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>Editar Dados Pessoais</a>
             <a href="alterar_senha2.php">Alterar Senha</a>
@@ -167,7 +73,6 @@ if (!isset($_SESSION['usuario'])) {
 
     </div>
 
-    <!-- BOTÃO DE MODO ESCURO -->
     <img class="dark-toggle" id="darkToggle"
          src="icones/lua.png"
          alt="Modo Escuro"
@@ -179,7 +84,59 @@ if (!isset($_SESSION['usuario'])) {
 
         <div class="conteudo">
             
-<h2>Produtos Cadastrados</h2>
+<h2>Ingredientes Cadastrados</h2>
+<?php
+// ============================================================
+// LÓGICA DO BANNER DE TOPO (CORRIGIDA E APRIMORADA)
+// ============================================================
+
+// Contamos separadamente: 
+// 1. Críticos (menos de 10)
+// 2. Baixos (entre 10 e 20)
+$sql_count = "SELECT 
+                SUM(CASE WHEN quantidade_estoque < 10 THEN 1 ELSE 0 END) as criticos,
+                SUM(CASE WHEN quantidade_estoque >= 10 AND quantidade_estoque <= 20 THEN 1 ELSE 0 END) as baixos
+              FROM ingrediente";
+
+$res_count = $conexao->query($sql_count);
+$dados_count = $res_count->fetch_assoc();
+
+// Garante que sejam inteiros (para evitar erros caso venha nulo)
+$total_criticos = (int)$dados_count['criticos'];
+$total_baixos   = (int)$dados_count['baixos'];
+
+// Se houver qualquer tipo de alerta (crítico ou baixo), mostramos o banner
+if ($total_criticos > 0 || $total_baixos > 0) {
+    
+    $msg_banner = "";
+    $classe_banner = "";
+
+    // CENÁRIO 1: Tem Críticos E Baixos (O pior caso)
+    if ($total_criticos > 0 && $total_baixos > 0) {
+        $classe_banner = 'vermelho'; // Cor vermelha predomina pela urgência
+        $msg_banner = "⚠️ <strong>AÇÃO NECESSÁRIA:</strong> Você tem <strong>$total_criticos itens CRÍTICOS</strong> (vermelho) e <strong>$total_baixos com estoque baixo</strong> (laranja).";
+    } 
+    // CENÁRIO 2: Apenas Críticos
+    elseif ($total_criticos > 0) {
+        $classe_banner = 'vermelho';
+        $msg_banner = "⚠️ <strong>URGENTE:</strong> Você tem <strong>$total_criticos ingredientes com estoque CRÍTICO</strong> (abaixo de 10 un).";
+    } 
+    // CENÁRIO 3: Apenas Baixos
+    else {
+        $classe_banner = 'laranja';
+        $msg_banner = "⚠️ <strong>ATENÇÃO:</strong> Você tem <strong>$total_baixos ingredientes com estoque baixo</strong> (abaixo de 20 un).";
+    }
+
+    $detalhe = "Role a página para identificar os produtos marcados.";
+
+    echo "
+    <div class='banner-alerta $classe_banner'>
+        <span class='banner-resumo'>$msg_banner</span>
+        <small>$detalhe</small>
+    </div>
+    ";
+}
+?>
 
 
 <?php if (isset($_GET['msg']) && $_GET['msg'] == 'excluido'): ?>
@@ -198,31 +155,35 @@ if (!isset($_SESSION['usuario'])) {
                 i.descricao
             FROM ingrediente i
                              LEFT JOIN ingrediente_imagem iim ON i.id_ingrediente = iim.id_ingrediente AND iim.imagem_principal = 1
-            ORDER BY i.id_ingrediente DESC";
+            ORDER BY i.quantidade_estoque ASC, i.id_ingrediente DESC"; // Alterei a ordem para mostrar os com estoque baixo primeiro!
 
     $resultado = $conexao->query($sql);
 if ($resultado->num_rows > 0) {
     while ($ingrediente = $resultado->fetch_assoc()) {
 
-        $imagem = $ingrediente['caminho_imagem'] ?: 'uploads/sem_imagem.png'; // imagem padrão
+        $imagem = $ingrediente['caminho_imagem'] ?: 'uploads/sem_imagem.png'; 
 
-        // NOVO: Lógica para determinar a classe de alerta
+        // Lógica para determinar a classe de alerta (Bordas)
         $alerta_class = '';
         if ($ingrediente['quantidade_estoque'] < 10) {
             $alerta_class = 'alerta-vermelho';
         } elseif ($ingrediente['quantidade_estoque'] <= 20) {
             $alerta_class = 'alerta-laranja';
         }
-        // FIM NOVO
 
-        // NOVO: Aplicando a classe de alerta ao div.card
         echo "
-        <div class='card {$alerta_class}'>
+        <div class='card-ingrediente {$alerta_class}'>
             <img src='{$imagem}' alt='Imagem do Ingrediente'>
             <div class='info'>
                 <h3>" . htmlspecialchars($ingrediente['nome_ingrediente']) . "</h3>
                 <p><strong>Preço:</strong> MT " . number_format($ingrediente['preco_adicional'], 2, ',', '.') . "</p>
-                <p><strong>Estoque:</strong> {$ingrediente['quantidade_estoque']} unidades</p>
+                
+                <p><strong>Estoque:</strong> 
+                    <span style='" . ($alerta_class ? "font-weight:bold; color:" . ($alerta_class == 'alerta-vermelho' ? '#cc0000' : '#d68100') : "") . "'>
+                        {$ingrediente['quantidade_estoque']} unidades
+                    </span>
+                </p>
+                
                 <p><strong>Descrição:</strong> {$ingrediente['descricao']}</p>
             </div>
 
@@ -243,40 +204,6 @@ if ($resultado->num_rows > 0) {
     ?>
 </div>
      </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    <?php if (isset($_SESSION['alerta_estoque_ingredientes'])): 
-        $alerta_tipo = $alerta_vermelho_presente ? 'vermelho' : 'laranja';
-    ?>
-        // Dados de alerta persistidos
-        const alertas = <?php echo json_encode($_SESSION['alerta_estoque_ingredientes']); ?>;
-        const tipoAlerta = '<?php echo $alerta_tipo; ?>';
-        
-        let listaItens = alertas.map(item => `<li>${item.nome} (${item.estoque} unid.)</li>`).join('');
-        
-        const popup = document.createElement('div');
-        popup.className = `toast-ingrediente ${tipoAlerta}`;
-        
-        popup.innerHTML = `
-            <button class="close-btn" aria-label="Fechar Alerta">&times;</button>
-            <h4>⚠️ ALERTA DE ESTOQUE - Reposição Urgente</h4>
-            <p>Os seguintes ingredientes estão com estoque **${tipoAlerta === 'vermelho' ? 'CRÍTICO' : 'BAIXO'}**:</p>
-            <ul>${listaItens}</ul>
-        `;
-        
-        document.body.appendChild(popup);
-        
-        // Exibe o popup
-        setTimeout(() => popup.classList.add('show'), 100);
 
-        // Funcionalidade para fechar manualmente (não remove da sessão, apenas oculta temporariamente)
-        popup.querySelector('.close-btn').addEventListener('click', function() {
-            popup.classList.remove('show');
-            setTimeout(() => popup.remove(), 500); // Remove do DOM após a transição
-        });
-        
-    <?php endif; ?>
-});
-</script>
 </body>
 </html>

@@ -1,12 +1,10 @@
 <?php
-// Inclui os ficheiros de conexão e segurança
+//gerar_fatura.php
 include "conexao.php";
 require_once "require_login.php";
 
-// Define o cabeçalho para PDF/impressão
 header("Content-Type: text/html; charset=UTF-8");
 
-// Verifica se o usuário está logado
 if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id_usuario'])) {
     echo "Acesso não autorizado. Por favor, faça login.";
     exit;
@@ -14,18 +12,31 @@ if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['id_usuario'])) 
 
 $id_usuario = $_SESSION['usuario']['id_usuario'];
 
-// --- Variáveis de Filtro ---
 $id_pedido = filter_input(INPUT_GET, 'id_pedido', FILTER_SANITIZE_NUMBER_INT);
 $filtro_data = filter_input(INPUT_GET, 'filtro', FILTER_SANITIZE_STRING) ?? 'todos';
 $is_lote = isset($_GET['lote']) && $_GET['lote'] === 'true';
 
-// Inicialização de variáveis
 $pedidos = [];
 $ids_pedidos = [];
 $titulo_fatura = "Fatura de Pedido";
 
+// Função para formatar duração
+function formatarDuracao($minutos) {
+    if ($minutos === null || $minutos < 0) {
+        return "N/A";
+    }
+    
+    $horas = floor($minutos / 60);
+    $mins = $minutos % 60;
+    
+    if ($horas > 0) {
+        return "{$horas}h {$mins}min";
+    } else {
+        return "{$mins}min";
+    }
+}
+
 try {
-    // --- 1. CONSTRUÇÃO DA QUERY BASEADA NO FILTRO ---
     $sql_filtro_data = "";
     $data_hoje = date('Y-m-d');
     $data_semana_passada = date('Y-m-d', strtotime('-7 days'));
@@ -34,11 +45,9 @@ try {
     $data_seis_meses = date('Y-m-d', strtotime('-6 months'));
 
     if ($id_pedido) {
-        // Se for um pedido individual, o filtro é o ID do pedido
         $sql_filtro_data = " AND p.id_pedido = " . $conexao->real_escape_string($id_pedido);
-        $is_lote = false; // Garante que não é lote se tiver ID específico
+        $is_lote = false;
     } elseif ($is_lote) {
-        // Se for lote, aplica o filtro de data
         switch ($filtro_data) {
             case 'diario':
                 $sql_filtro_data = " AND DATE(p.data_pedido) = '$data_hoje'";
@@ -71,23 +80,24 @@ try {
         exit;
     }
 
-    // A consulta SEMPRE inclui o ID do usuário para garantir que o cliente só veja as suas próprias faturas.
     $sql_pedidos = "
         SELECT
-            p.id_pedido, p.data_pedido, p.total, p.telefone, p.email, p.bairro, p.ponto_referencia,
-            p.endereco_json,
-            u.nome AS nome_cliente, u.apelido AS apelido_cliente,
-            t.nome_tipo_entrega, tp.tipo_pagamento
+            p.id_pedido, p.data_pedido, p.data_fim_pedido, p.total, p.telefone, p.email, p.bairro, p.ponto_referencia,
+            p.endereco_json, p.idtipo_entrega, p.idtipo_origem_pedido, p.idtipo_pagamento,
+            u.nome AS nome_cliente, u.apelido AS apelido_cliente, t.preco_adicional,
+            t.nome_tipo_entrega, tp.tipo_pagamento, p.troco, p.valor_pago_manual,
+            TIMESTAMPDIFF(MINUTE, p.data_pedido, p.data_fim_pedido) AS duracao_minutos
         FROM pedido p
         JOIN usuario u ON p.id_usuario = u.id_usuario
         JOIN tipo_entrega t ON p.idtipo_entrega = t.idtipo_entrega
         JOIN tipo_pagamento tp ON p.idtipo_pagamento = tp.idtipo_pagamento
-        WHERE p.status_pedido = 'entregue'
+        WHERE p.status_pedido IN ('entregue', 'Pago')
         AND p.oculto_cliente = FALSE
         AND p.id_usuario = ? 
         $sql_filtro_data
         ORDER BY p.data_pedido DESC
     ";
+$idtipo_pagamento= ['idtipo_pagamento'];
 
     $stmt_pedidos = $conexao->prepare($sql_pedidos);
     $stmt_pedidos->bind_param("i", $id_usuario);
@@ -104,7 +114,7 @@ try {
         exit;
     }
 
-    // --- 2. BUSCAR ITENS E PERSONALIZAÇÕES (Lógica mantida) ---
+    // Buscar itens e personalizações (mantido)
     $itens_por_pedido = [];
     $personalizacoes_por_item = [];
     $ids_itens = [];
@@ -112,7 +122,6 @@ try {
     if (!empty($ids_pedidos)) {
         $placeholders_pedidos = implode(',', array_fill(0, count($ids_pedidos), '?'));
         
-        // Buscar Itens
         $sql_itens = "
             SELECT ip.id_item_pedido, ip.id_pedido, ip.quantidade, ip.subtotal, ip.preco_unitario AS preco,
                     p.nome_produto
@@ -131,7 +140,6 @@ try {
             $ids_itens[] = $item['id_item_pedido'];
         }
         
-        // Buscar Personalizações
         if (!empty($ids_itens)) {
             $placeholders_itens = implode(',', array_fill(0, count($ids_itens), '?'));
             $sql_pers = "
@@ -161,7 +169,6 @@ try {
         }
     }
     
-    // 3. ORGANIZAR OS DADOS (Lógica mantida)
     foreach ($pedidos as $id_pedido => &$pedido) {
         $pedido['itens'] = $itens_por_pedido[$id_pedido] ?? [];
         foreach ($pedido['itens'] as &$item) {
@@ -176,8 +183,6 @@ try {
     echo "Erro ao gerar fatura: " . $e->getMessage();
     exit;
 }
-
-// --- 4. GERAÇÃO DO HTML PARA IMPRESSÃO ---
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -207,6 +212,29 @@ try {
         .item-details small { display: block; margin-top: 5px; color: #666; font-style: italic; }
         .lote-title { font-size: 28px; text-align: center; margin-bottom: 30px; }
         
+        /* NOVO: Estilos para duração */
+        .pedido-duracao-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .pedido-duracao-box strong {
+            font-size: 16px;
+        }
+        
+        .timestamps-box {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 13px;
+            border-left: 4px solid #667eea;
+        }
+        
         @media print {
             body { background: none; padding: 0; }
             .invoice-container { margin: 0; border: none; box-shadow: none; padding: 0; }
@@ -219,7 +247,12 @@ try {
         <div class="lote-title"><?= htmlspecialchars($titulo_fatura) ?></div>
     <?php endif; ?>
 
-    <?php foreach ($pedidos as $pedido): ?>
+    <?php foreach ($pedidos as $pedido): 
+        
+            $id_tipo_entrega = intval($pedido['idtipo_entrega']);
+                $id_tipo_origem = intval($pedido['idtipo_origem_pedido']);
+                $idtipo_pagamento= intval($pedido['idtipo_pagamento']);
+        ?>
         <div class="invoice-container">
             <div class="invoice-header">
                 <div class="invoice-logo">
@@ -231,10 +264,22 @@ try {
                     <p>Gerado em: <?= (new DateTime())->format('d/m/Y H:i') ?></p>
                 </div>
             </div>
+            
+            <div class="pedido-duracao-box">
+                <strong>Duração do Atendimento: <?= formatarDuracao($pedido['duracao_minutos']) ?></strong>
+            </div>
+            
+            <div class="timestamps-box">
+                <strong>Início do Pedido:</strong> <?= (new DateTime($pedido['data_pedido']))->format('d/m/Y H:i:s') ?><br>
+                <strong>Conclusão:</strong> <?= $pedido['data_fim_pedido'] ? (new DateTime($pedido['data_fim_pedido']))->format('d/m/Y H:i:s') : 'N/A' ?>
+            </div>
 
             <div class="invoice-info">
                 <p><strong>Cliente:</strong> <?= htmlspecialchars($pedido['nome_cliente'] . ' ' . $pedido['apelido_cliente']) ?></p>
+
+                 <?php if($id_tipo_origem == 1): ?>
                 <p><strong>Contacto:</strong> <?= htmlspecialchars($pedido['email'] ?? 'N/A') ?> / <?= htmlspecialchars($pedido['telefone'] ?? 'N/A') ?></p>
+   <?php endif?>
                 <p><strong>Entrega:</strong> <?= htmlspecialchars($pedido['nome_tipo_entrega']) ?></p>
                 <?php if ($pedido['nome_tipo_entrega'] === 'Delivery'):
                     $endereco_completo = $pedido['bairro'];
@@ -289,13 +334,30 @@ try {
                 </tbody>
             </table>
 
-            <div class="invoice-total">
+            <?php if($idtipo_pagamento==6):?>
+<div class="invoice-total">
                 <p>Subtotal (Produtos): <strong><?= number_format($subtotal_pedido, 2, ',', '.') ?> MT</strong></p>
-                <p>Taxa de Entrega: <strong>0.00 MT</strong> </p>
+               
+                <p style="border-top: 1px solid #333; padding-top: 10px;">
+                    Total Pago: <strong><?= number_format($pedido['valor_pago_maunal'], 2, ',', '.') ?> MT</strong>
+                    Troco: <strong><?= number_format($pedido['troco'], 2, ',', '.') ?> MT</strong>
+           
+                </p>
+            </div>
+<?php else: ?>
+
+    <div class="invoice-total">
+                <p>Subtotal (Produtos): <strong><?= number_format($subtotal_pedido, 2, ',', '.') ?> MT</strong></p>
+           <?php if ($id_tipo_entrega === 2): ?>
+                <p>Taxa de Entrega: <strong><?= number_format($pedido['preco_adicional'] ?? 0, 2, ',', '.') ?> MT</strong> </p>
+                    <?php endif?>
                 <p style="border-top: 1px solid #333; padding-top: 10px;">
                     Total Pago: <strong><?= number_format($pedido['total'], 2, ',', '.') ?> MT</strong>
                 </p>
             </div>
+                <?php endif?>
+            
+        
             
              <div style="text-align: center; margin-top: 40px; font-size: 12px; color: #666;">
                 Obrigado pela sua preferência!

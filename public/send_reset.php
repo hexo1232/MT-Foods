@@ -1,4 +1,5 @@
 <?php
+//public/send_reset.php
 require_once __DIR__ . '/../src/PasswordReset.php';
 
 $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);

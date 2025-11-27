@@ -15,6 +15,7 @@ if (!isset($_SESSION['usuario'])) {
 
 $usuario_logado = $_SESSION['usuario'];
 $id_usuario = $usuario_logado['id_usuario'];
+$idperfil = $usuario_logado['idperfil'];
 $mensagem = "";
 $tipo_mensagem = "error";
 $redirecionar = false;
@@ -62,15 +63,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alterar Senha</title>
     <link rel="stylesheet" href="css/admin.css">
          <script src="js/darkmode1.js"></script>
                 <script src="js/mostrarSenha.js"></script>
                   <script src="js/sidebar.js"></script>
+                                            <script src="js/dropdown2.js"></script>
 
 </head>
 <body>
-<div class="conteudo">
+
     <h2>Alterar Senha</h2>
 
     <?php if (!empty($mensagem)): ?>
@@ -79,21 +82,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     <?php endif; ?>
 
+
     <button class="menu-btn">☰</button>
 
-<!-- Overlay -->
 <div class="sidebar-overlay"></div>
 
 
   <sidebar class="sidebar">
-       <h2>Menu Do(a) <?= htmlspecialchars($usuario['nome'] ?? 'Usuário') ?></h2>
-        <a href="cardapio.php">Voltar ao cardapio</a>
-           <!-- Rodapé da sidebar -->
-    <div class="sidebar-footer">
-         <img class="dark-toggle" id="darkToggle" src="icones/lua.png" alt="Modo Escuro" title="Alternar modo escuro">
+              <?php if ($idperfil==1): ?>
+        <a href="dashboard.php"><img class="icone2" src="icones/voltar2.png" alt="Logout" title="voltar">Voltar</a>
+      <?php elseif($idperfil==2): ?>
+        <a href="dashboard.php"><img class="icone2" src="icones/voltar2.png" alt="Logout" title="voltar">Voltar</a>
+            <?php else: ?>
+<a href="cardapio.php">Voltar ao Cardápio</a>
+       <?php endif; ?>
+   
+   <div class="sidebar-user-wrapper">
+
+    <div class="sidebar-user" id="usuarioDropdown">
+
+        <div class="usuario-avatar" style="background-color: <?= $corAvatar ?>;">
+            <?= $iniciais ?>
+        </div>
+
+        <div class="usuario-dados">
+            <div class="usuario-nome"><?= $nome ?></div>
+            <div class="usuario-apelido"><?= $apelido ?></div>
+        </div>
+
+        <!-- DROPDOWN PARA CIMA -->
+        <div class="usuario-menu" id="menuPerfil">
+          
+            <a href="logout.php">
+            <img class="iconelogout" src="icones/logout1.png" alt="Logout" title="Sair">    
+            Sair</a>
+        </div>
+
     </div>
+
+    <!-- BOTÃO DE MODO ESCURO -->
+    <img class="dark-toggle" id="darkToggle"
+         src="icones/lua.png"
+         alt="Modo Escuro"
+         title="Alternar modo escuro">
+</div>
+        
      
     </sidebar>
+
+    <div class="conteudo">
 
 <form method="POST" action="">
   <label>Senha atual:</label>
@@ -128,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          class="toggle-senha"
          data-target="campo-senha-confirmacao"
          style="position: absolute; right: 10px; cursor: pointer; width: 22px; opacity: 0.8;">
-  </div>
+  </div><br><br>
 
   <input class="editar" type="submit" value="Atualizar Senha">
 </form>

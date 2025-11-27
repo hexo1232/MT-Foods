@@ -186,7 +186,7 @@ if ($id_usuario > 0) {
 
     <div class="links-menu">
       <?php if ($usuario): ?>
-             <a href="index.php"><img class="icone2" src="icones/casa1.png" alt="Logout" title="casa"> Início</a>
+            
         <a href="promocoes.php?<?= $admin_query_param ?>"><img class="icone2" src="icones/promo1.png" alt="Logout" title="casa">Promoções</a>
 
         <a href="historico_compras.php?<?= $admin_query_param ?>">
@@ -196,7 +196,7 @@ if ($id_usuario > 0) {
         </a>
 
         <?php if (!$is_admin): ?>
-            
+             <a href="index.php"><img class="icone2" src="icones/casa1.png" alt="Logout" title="casa"> Início</a>
           <a href="monitorar_pedido.php">
             <img class="icone2" src="icones/progresso1.png" alt="Logout" title="monitorar"> 
             Acompanhar Pedidos
@@ -205,7 +205,14 @@ if ($id_usuario > 0) {
         <?php endif; ?>
 
         <?php if ($modo_admin): ?>
-          <a href="admin_finalizar_pedido.php" class="btn-pedido-manual">Ver Pedido Manual</a>
+
+                      <a href="dashboard.php" class="btn-pedido-manual">
+              
+        Voltar á dashboard</a>
+
+          <a href="admin_lista_pedidos_finalizar.php" class="btn-pedido-manual">
+               <img class="icone2" src="icones/manual1.png" alt="manual" title="manual"> 
+          Ver Pedido Manual</a>
         <?php endif; ?>
  
       <?php else: ?>
@@ -256,10 +263,16 @@ if ($id_usuario > 0) {
             <div class="usuario-nome"><?= $nomeCompleto ?></div>
 
             <div class="menu-perfil" id="menuPerfil">
-              <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>Editar Dados Pessoais</a>
-              <a href="alterar_senha2.php">Alterar Senha</a>
+              <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>
+              <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+              Editar Dados Pessoais</a>
+              <a href="alterar_senha2.php">
+              <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">   
+              Alterar Senha</a>
               <a href="logout.php">
-                <img class="iconelogout" src="icones/logout1.png" alt="Logout" title="Sair"> Sair
+                <img class="iconelogout" src="icones/logout1.png" alt="Logout" title="Sair"> 
+                
+                Sair
               </a>
             </div>
           </div>
@@ -279,36 +292,41 @@ if ($id_usuario > 0) {
 
   <ul class="sidebar-links">
     <?php if ($usuario): ?>
-      <li><a href="index.php">
-        <a href="index.php"><img class="" src="icones/casa1.png" alt="Logout" title="casa"> Voltar ao Início</a></li>
-      <li><a href="promocoes.php?<?= $admin_query_param ?>"><img class="" src="icones/promo1.png" alt="Logout" title="casa"> Promoções</a></li>
+
+        <?php if (!$is_admin): ?>
+    <li><a href="index.php">
+      <img class="icone2" src="icones/casa1.png" alt="Logout" title="casa"> Voltar ao Início</a></li>
+        <li>
+          <a href="monitorar_pedido.php">
+           <img class="icone2" src="icones/progresso1.png" alt="Logout" title="monitorar">      Acompanhar Pedidos
+             <span id="pedidos-ativos-contador-mobile" class="contador">0</span>
+          </a>
+        </li>
+      <?php endif; ?>
+      
+      <li><a href="promocoes.php?<?= $admin_query_param ?>"><img class="icone2" src="icones/promo1.png" alt="Logout" title="casa"> Promoções</a></li>
 
       <li>   <a href="historico_compras.php?<?= $admin_query_param ?>">
-          <img class="" src="icones/historico1.png" alt="Logout" title="historico"> Histórico de Compras
+          <img class="icone2" src="icones/historico1.png" alt="Logout" title="historico"> Histórico de Compras
           <span id="finalizados-contador-mobile" class="contador">0</span>
         </a>
       </li>
 
       
-<?php if (!$is_admin): ?>
-        <li>
-          <a href="monitorar_pedido.php">
-           <img class="" src="icones/progresso1.png" alt="Logout" title="monitorar">      Acompanhar Pedidos
-             <span id="pedidos-ativos-contador-mobile" class="contador">0</span>
-          </a>
-        </li>
-      <?php endif; ?>
+
 
       <?php if ($modo_admin): ?>
-        <li><a href="admin_finalizar_pedido.php" class="btn-pedido-manual"> Ver Pedido Manual</a></li>
+        <li><a href="admin_finalizar_pedido.php" class="btn-pedido-manual"> 
+         <img class="icone2" src="icones/manual1.png" alt="manual" title="manual">     
+        Ver Pedido Manual</a></li>
       <?php endif; ?>
 
     <?php else: ?>
-      <li> <a href="index.php"><img class="" src="icones/casa1.png" alt="Logout" title="casa"> Voltar ao Início</a></li>
+      <li> <a href="index.php"><img class="icone2" src="icones/casa1.png" alt="Logout" title="casa"> Voltar ao Início</a></li>
   
-      <li><a href="monitorar_pedido.php">        <img class="" src="icones/progresso1.png" alt="Logout" title="monitorar">    Acompanhar Pedidos</a></li>
-      <li><a href="historico_compras.php">  <img class="" src="icones/historico1.png" alt="Logout" title="historico"> Histórico</a></li>
-      <li><a href="promocoes.php"> <img class="" src="icones/promo1.png" alt="Logout" title="casa"> Promoções</a></li>
+      <li><a href="monitorar_pedido.php">        <img class="icone2" src="icones/progresso1.png" alt="Logout" title="monitorar">    Acompanhar Pedidos</a></li>
+      <li><a href="historico_compras.php">  <img class="icone2" src="icones/historico1.png" alt="Logout" title="historico"> Histórico</a></li>
+      <li><a href="promocoes.php"> <img class="icone2" src="icones/promo1.png" alt="Logout" title="casa"> Promoções</a></li>
     <?php endif; ?>
   </ul>
 

@@ -1,4 +1,5 @@
 <?php
+//historico_compras_admin.php
 include "conexao.php";
 require_once "require_login.php";
 include "usuario_info.php";
@@ -12,25 +13,23 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-// A variável de sessão pode ser um array ou um valor simples, então é mais seguro extrair o ID.
 $usuario = $_SESSION['usuario'] ?? null;
 $id_usuario = $usuario['id_usuario'] ?? 0;
 $is_admin = ($usuario && ($usuario['idperfil'] ?? 0) == 1); 
 
 if (!$is_admin) {
-    // Redireciona se não for administrador
     header("Location: dashboard.php");
     exit;
 }
 
-// --- LÓGICA DE FILTRAGEM DE DATAS ATUALIZADA ---
+// LÓGICA DE FILTRAGEM DE DATAS
 $filtro_data = $_GET['filtro'] ?? 'todos';
 $sql_filtro = "";
 $data_hoje = date('Y-m-d');
 $data_semana_passada = date('Y-m-d', strtotime('-7 days'));
 $data_mes_passado = date('Y-m-d', strtotime('first day of last month'));
-$data_tres_meses = date('Y-m-d', strtotime('-3 months')); // Novo
-$data_seis_meses = date('Y-m-d', strtotime('-6 months')); // Novo
+$data_tres_meses = date('Y-m-d', strtotime('-3 months'));
+$data_seis_meses = date('Y-m-d', strtotime('-6 months'));
 
 switch ($filtro_data) {
     case 'diario':
@@ -42,10 +41,10 @@ switch ($filtro_data) {
     case 'mensal':
         $sql_filtro = " AND p.data_pedido >= '$data_mes_passado'";
         break;
-    case 'tres_meses': // Novo Filtro
+    case 'tres_meses':
         $sql_filtro = " AND p.data_pedido >= '$data_tres_meses'";
         break;
-    case 'seis_meses': // Novo Filtro
+    case 'seis_meses':
         $sql_filtro = " AND p.data_pedido >= '$data_seis_meses'";
         break;
     case 'todos':
@@ -60,7 +59,7 @@ if ($id_usuario) {
         $stmt = $conexao->prepare("
             UPDATE pedido 
             SET notificacao_vista = 1 
-            WHERE id_usuario = ? AND status_pedido = 'entregue' AND notificacao_vista = 0
+            WHERE id_usuario = ? AND status_pedido IN ('entregue', 'servido') AND notificacao_vista = 0
         ");
         $stmt->bind_param("i", $id_usuario);
         $stmt->execute();
@@ -81,6 +80,7 @@ $sql_pedidos = "
     SELECT
         p.id_pedido,
         p.data_pedido,
+        p.data_fim_pedido,
         p.total,
         p.idtipo_entrega,
         u.nome AS nome_cliente,
@@ -89,7 +89,9 @@ $sql_pedidos = "
         tp.tipo_pagamento,
         p.endereco_json,
         p.bairro,
-        p.ponto_referencia,
+         p.idtipo_entrega, p.idtipo_origem_pedido, p.idtipo_pagamento,
+        p.ponto_referencia, p.troco, p.valor_pago_manual, t.preco_adicional,
+        TIMESTAMPDIFF(MINUTE, p.data_pedido, p.data_fim_pedido) AS duracao_minutos,
         (
             SELECT status_pedido2
             FROM rastreamento_pedido
@@ -101,7 +103,7 @@ $sql_pedidos = "
     JOIN usuario u ON p.id_usuario = u.id_usuario
     JOIN tipo_entrega t ON p.idtipo_entrega = t.idtipo_entrega
     JOIN tipo_pagamento tp ON p.idtipo_pagamento = tp.idtipo_pagamento
-    WHERE p.status_pedido = 'entregue'
+    WHERE p.status_pedido IN ('Pago','entregue','servido')
     $sql_filtro
     ORDER BY p.data_pedido DESC
 ";
@@ -115,7 +117,7 @@ $result_pedidos = $stmt_pedidos->get_result();
         $ids_pedidos[] = $pedido['id_pedido'];
     }
 
-    // 2. Busca todos os itens (lógica mantida)
+    // Busca itens (mantido)
     if (!empty($ids_pedidos)) {
         $placeholders_pedidos = implode(',', array_fill(0, count($ids_pedidos), '?'));
         $sql_itens = "
@@ -138,7 +140,7 @@ $result_pedidos = $stmt_pedidos->get_result();
         }
     }
 
-    // 3. Busca todas as personalizações (lógica mantida)
+    // Busca personalizações (mantido)
     if (!empty($ids_itens)) {
         $placeholders_itens = implode(',', array_fill(0, count($ids_itens), '?'));
         $sql_pers = "
@@ -170,7 +172,7 @@ $result_pedidos = $stmt_pedidos->get_result();
         }
     }
 
-    // 4. Organiza todos os dados (lógica mantida)
+    // Organiza dados
     foreach ($pedidos as $id_pedido => &$pedido) {
         $pedido['itens'] = $itens_por_pedido[$id_pedido] ?? [];
         foreach ($pedido['itens'] as &$item) {
@@ -184,6 +186,22 @@ $result_pedidos = $stmt_pedidos->get_result();
 } catch (Exception $e) {
     echo "<p style='color:red;'>Erro ao carregar histórico de compras: " . $e->getMessage() . "</p>";
     exit;
+}
+
+// Função para formatar duração
+function formatarDuracao($minutos) {
+    if ($minutos === null || $minutos < 0) {
+        return "N/A";
+    }
+    
+    $horas = floor($minutos / 60);
+    $mins = $minutos % 60;
+    
+    if ($horas > 0) {
+        return "{$horas}h {$mins}min";
+    } else {
+        return "{$mins}min";
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -215,14 +233,14 @@ $result_pedidos = $stmt_pedidos->get_result();
             transition: background-color 0.3s;
         }
         .filtros button.active {
-            background-color: #4CAF50; /* Cor primária */
+            background-color: #4CAF50;
             color: white;
         }
         .filtros button:not(.active):hover {
             background-color: #e2e8f0;
         }
         .print-btn {
-             background-color: #007bff; /* Cor para impressão */
+             background-color: #007bff;
              color: white;
         }
         .print-btn:hover {
@@ -245,6 +263,34 @@ $result_pedidos = $stmt_pedidos->get_result();
         }
         .print-btn-individual:hover {
             background-color: #e0a800;
+        }
+        
+        /* NOVO: Estilos para duração */
+        .pedido-duracao {
+            background:  #ffc107;
+            color: black;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+            position: absolute;
+                  right: 0;
+  
+        }
+        
+        .pedido-timestamps {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .pedido-timestamps strong {
+            color: #333;
         }
     </style>
     <script src="logout_auto.js"></script>
@@ -271,9 +317,15 @@ $result_pedidos = $stmt_pedidos->get_result();
                 <div class="usuario-apelido"><?= $apelido ?></div>
             </div>
             <div class="usuario-menu" id="menuPerfil">
-                <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>Editar Dados Pessoais</a>
-                <a href="alterar_senha2.php">Alterar Senha</a>
-                <a href="logout.php">Sair</a>
+                <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>
+                <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">    
+                Editar Dados Pessoais</a>
+                <a href="alterar_senha2.php">
+                <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">     
+                Alterar Senha</a>
+                <a href="logout.php">
+                <img class="iconelogout" src="icones/logout1.png" alt="Logout" title="Sair">    
+                Sair</a>
             </div>
         </div>
         <img class="dark-toggle" id="darkToggle"
@@ -324,20 +376,51 @@ $result_pedidos = $stmt_pedidos->get_result();
     <?php if (!empty($pedidos)): ?>
         
         <form id="formPedidos">
-            <?php foreach ($pedidos as $pedido): ?>
+            <?php foreach ($pedidos as $pedido):
+                
+              
+$id_tipo_entrega = intval($pedido['idtipo_entrega']);
+                $id_tipo_origem = intval($pedido['idtipo_origem_pedido']);
+                $idtipo_pagamento= intval($pedido['idtipo_pagamento']);
+
+
+?>
+                
+             
                 <div class="pedido-card" data-id="<?= htmlspecialchars($pedido['id_pedido']) ?>">
                     <div class="pedido-header">
                         <div>
-                            <strong>Pedido número <?= $pedido['id_pedido'] ?> </strong> 
+                            <strong>Pedido número <?= $pedido['id_pedido'] ?> </strong>
+                            <span class="pedido-duracao">
+                                Duração do Atendimento: <?= formatarDuracao($pedido['duracao_minutos']) ?>
+                            </span>
                         </div>
-                        <div><?= (new DateTime($pedido['data_pedido']))->format('d/m/Y H:i') ?></div>
+                        <!-- <div><?= (new DateTime($pedido['data_pedido']))->format('d/m/Y H:i') ?></div> -->
+                    </div>
+                    
+                    <div class="pedido-timestamps">
+                        <strong>Início:</strong> <?= (new DateTime($pedido['data_pedido']))->format('d/m/Y H:i:s') ?> |
+                        <strong>Fim:</strong> <?= $pedido['data_fim_pedido'] ? (new DateTime($pedido['data_fim_pedido']))->format('d/m/Y H:i:s') : 'N/A' ?>
                     </div>
 
                     <div class="pedido-details">
                         <p><b>Cliente:</b> <?= htmlspecialchars($pedido['nome_cliente'] . ' ' . $pedido['apelido_cliente']) ?></p>
+                         <?php if($id_tipo_origem == 1): ?>
+                <p><strong>Contacto:</strong> <?= htmlspecialchars($pedido['email'] ?? 'N/A') ?> / <?= htmlspecialchars($pedido['telefone'] ?? 'N/A') ?></p>
+   <?php endif?>
                         <p><b>Entrega:</b> <?= htmlspecialchars($pedido['nome_tipo_entrega']) ?></p>
                         <p><b>Pagamento:</b> <?= htmlspecialchars($pedido['tipo_pagamento']) ?></p>
+                                 <?php if($idtipo_pagamento == 6): // Verifica se é o tipo de pagamento específico ?>
+ Total Pago: <strong><?= number_format($pedido['valor_pago_manual'], 2, ',', '.') ?> MT</strong><br>
+                    Troco: <strong><?= number_format($pedido['troco'], 2, ',', '.') ?> MT</strong>
+            
+                                          <?php else: ?>
+                                                     <?php if ($id_tipo_entrega === 2): ?>
+                <p>Taxa de Entrega: <strong><?= number_format($pedido['preco_adicional'] ?? 0, 2, ',', '.') ?> MT</strong> </p>
+                    <?php endif?>
                         <p><b>Total pago:</b> <?= number_format($pedido['total'], 2, ',', '.') ?> MZN</p>
+                             <?php endif?>
+            
                     </div>
 
                     
@@ -405,23 +488,13 @@ $result_pedidos = $stmt_pedidos->get_result();
     </div>
 
     <script>
-        /**
-         * Abre a janela de impressão para uma fatura individual.
-         * @param {number} id_pedido O ID do pedido a ser impresso.
-         */
         function imprimirFaturaIndividual(id_pedido) {
             const url = `gerar_fatura_admin.php?id_pedido=${id_pedido}`;
-            // Abre em uma nova janela para forçar a impressão
             window.open(url, '_blank', 'width=800,height=600'); 
         }
 
-        /**
-         * Abre a janela de impressão para um lote de faturas, baseado no filtro de data.
-         * @param {string} filtro O filtro de data ('diario', 'semanal', 'mensal', 'tres_meses', 'seis_meses', 'todos').
-         */
         function imprimirFaturaLote(filtro) {
             const url = `gerar_fatura_admin.php?filtro=${filtro}&lote=true`;
-            // Abre em uma nova janela para forçar a impressão
             window.open(url, '_blank', 'width=800,height=600'); 
         }
         

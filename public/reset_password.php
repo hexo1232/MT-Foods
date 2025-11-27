@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../src/PasswordReset.php'; // contém verifyToken() e a conexão PDO
+//public/reset_password.php
 
 // Obtém o token da URL
 $token = $_GET['token'] ?? '';

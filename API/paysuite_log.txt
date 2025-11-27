@@ -50,3 +50,152 @@
 2025-11-18 13:07:21 RESPONSE: {"status":"success","data":{"id":"ddfd0616-0cdd-462c-a546-e1a86aefc9ba","amount":"1.10","reference":"02902C4B84EE","checkout_url":"https:\/\/paysuite.tech\/checkout\/ddfd0616-0cdd-462c-a546-e1a86aefc9ba"}}
 2025-11-18 13:18:05 RESPONSE: {"status":"success","data":{"id":"37dfba85-cf50-4503-b3cd-f42f1abfabcf","amount":"1.00","reference":"87D9D465276C","checkout_url":"https:\/\/paysuite.tech\/checkout\/37dfba85-cf50-4503-b3cd-f42f1abfabcf"}}
 2025-11-18 22:13:22 RESPONSE: {"status":"success","data":{"id":"be7c65f4-2ccf-4fec-932a-545631cd408c","amount":"1.10","reference":"AE40B2E2677B","checkout_url":"https:\/\/paysuite.tech\/checkout\/be7c65f4-2ccf-4fec-932a-545631cd408c"}}
+2025-11-26 13:59:53 RESPONSE: {"status":"error","message":"The Reference field is required."}
+2025-11-26 14:00:31 RESPONSE: {"status":"success","data":{"id":"8ecb4b76-47c5-4910-937d-0dd7f64c6f0a","amount":"1.00","reference":"A7D468C62108","checkout_url":"https:\/\/paysuite.tech\/checkout\/8ecb4b76-47c5-4910-937d-0dd7f64c6f0a"}}
+2025-11-26 14:01:30 RESPONSE: {"status":"error","message":"The Reference field is required."}
+2025-11-26 14:03:25 RESPONSE: {"status":"success","data":{"id":"c9ba77ca-e476-4a73-be85-f2cf9772b8ea","amount":"1.00","reference":"F7AF81F5D8FE","checkout_url":"https:\/\/paysuite.tech\/checkout\/c9ba77ca-e476-4a73-be85-f2cf9772b8ea"}}
+2025-11-26 14:03:34 RESPONSE: {"status":"success","data":{"id":"35457f7a-a5b7-444b-9458-ee47d94ab631","amount":"1.00","reference":"500276D27F21","checkout_url":"https:\/\/paysuite.tech\/checkout\/35457f7a-a5b7-444b-9458-ee47d94ab631"}}
+2025-11-26 14:03:50 RESPONSE: {"status":"error","message":"The Reference field is required."}
+2025-11-26 14:10:49 RESPONSE: {"status":"error","message":"The Reference field is required."}
+2025-11-26 14:11:08 RESPONSE: {"status":"success","data":{"id":"6ca42ad4-8698-408b-ae4e-ec41b90f12eb","amount":"1.00","reference":"4B2B305AE7C7","checkout_url":"https:\/\/paysuite.tech\/checkout\/6ca42ad4-8698-408b-ae4e-ec41b90f12eb"}}
+2025-11-26 14:12:54 RESPONSE: {"status":"success","data":{"id":"c8442ae8-35ca-4429-9194-b490930c23b1","amount":"1.00","reference":"48B43357E0C6","checkout_url":"https:\/\/paysuite.tech\/checkout\/c8442ae8-35ca-4429-9194-b490930c23b1"}}
+2025-11-26 14:13:35 RESPONSE: {"status":"error","message":"The Reference field is required."}
+2025-11-26 14:15:30 RESPONSE: {"status":"success","data":{"id":"a898214e-6911-4f7b-b583-04569a313cca","amount":"1.00","reference":"F7DF7C637922","checkout_url":"https:\/\/paysuite.tech\/checkout\/a898214e-6911-4f7b-b583-04569a313cca"}}
+2025-11-26 14:16:35 RESPONSE: {"status":"success","data":{"id":"f3672709-1827-480a-86e9-7b9fad99f011","amount":"1.00","reference":"E983FDE04B9B","checkout_url":"https:\/\/paysuite.tech\/checkout\/f3672709-1827-480a-86e9-7b9fad99f011"}}
+2025-11-26 14:39:18 PAYLOAD: {
+    "amount": 1,
+    "currency": "MZN",
+    "reference": "B8239973F535",
+    "description": "Pedido de Jack Black - Ref: B8239973F535",
+    "callback_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php",
+    "return_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=B8239973F535",
+    "customer": {
+        "email": "jackblack@gmail.com",
+        "phone": "876821594",
+        "name": "Jack Black"
+    },
+    "payment_method": 4
+}
+RESPONSE: {"status":"success","data":{"id":"5c64224a-d86b-47c8-95a7-1f061c059490","amount":"1.00","reference":"B8239973F535","checkout_url":"https:\/\/paysuite.tech\/checkout\/5c64224a-d86b-47c8-95a7-1f061c059490"}}
+
+2025-11-26 14:39:58 PAYLOAD: {
+    "amount": 1,
+    "currency": "MZN",
+    "reference": "B846833D429C",
+    "description": "Pedido de Jack Black - Ref: B846833D429C",
+    "callback_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php",
+    "return_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=B846833D429C",
+    "customer": {
+        "email": "jackblack@gmail.com",
+        "phone": "876821594",
+        "name": "Jack Black"
+    },
+    "payment_method": 4
+}
+RESPONSE: {"status":"success","data":{"id":"5e795262-01a4-4553-934d-1d03085a2178","amount":"1.00","reference":"B846833D429C","checkout_url":"https:\/\/paysuite.tech\/checkout\/5e795262-01a4-4553-934d-1d03085a2178"}}
+
+2025-11-26 14:42:12 PAYLOAD: {
+    "amount": 1,
+    "currency": "MZN",
+    "reference": "C02FF517C53B",
+    "description": "Pedido de Jack Black - Ref: C02FF517C53B",
+    "merchant": {
+        "name": "Restaurante"
+    },
+    "callback_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php",
+    "return_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=C02FF517C53B",
+    "customer": {
+        "email": "jackblack@gmail.com",
+        "phone": "876821594",
+        "name": "Jack Black"
+    },
+    "payment_method": 4
+}
+RESPONSE: {"status":"success","data":{"id":"9ba0a21c-5b42-47c4-9058-6953223b239d","amount":"1.00","reference":"C02FF517C53B","checkout_url":"https:\/\/paysuite.tech\/checkout\/9ba0a21c-5b42-47c4-9058-6953223b239d"}}
+
+2025-11-26 14:43:02 PAYLOAD: {
+    "amount": 1,
+    "currency": "MZN",
+    "reference": "859A94EEB8F1",
+    "description": "Pedido de Jack Black - Ref: 859A94EEB8F1",
+    "merchant": {
+        "name": "Restaurante"
+    },
+    "callback_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php",
+    "return_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=859A94EEB8F1",
+    "customer": {
+        "email": "jackblack@gmail.com",
+        "phone": "876821594",
+        "name": "Jack Black"
+    },
+    "payment_method": 4
+}
+RESPONSE: {"status":"success","data":{"id":"c0c7fcac-184e-4d13-b602-81a3ef92991b","amount":"1.00","reference":"859A94EEB8F1","checkout_url":"https:\/\/paysuite.tech\/checkout\/c0c7fcac-184e-4d13-b602-81a3ef92991b"}}
+
+2025-11-26 14:43:32 PAYLOAD: {
+    "amount": 1,
+    "currency": "MZN",
+    "reference": "77A86D49B4BB",
+    "description": "Pedido de Jack Black - Ref: 77A86D49B4BB",
+    "merchant": {
+        "name": "HS"
+    },
+    "callback_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php",
+    "return_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=77A86D49B4BB",
+    "customer": {
+        "email": "jackblack@gmail.com",
+        "phone": "876821594",
+        "name": "Jack Black"
+    },
+    "payment_method": 4
+}
+RESPONSE: {"status":"success","data":{"id":"bc6ff40d-dd4c-4f49-b040-468fcfcd79b0","amount":"1.00","reference":"77A86D49B4BB","checkout_url":"https:\/\/paysuite.tech\/checkout\/bc6ff40d-dd4c-4f49-b040-468fcfcd79b0"}}
+
+2025-11-26 14:44:56 PAYLOAD: {
+    "amount": 1,
+    "currency": "MZN",
+    "reference": "E85F9670782A",
+    "description": "Pedido de Jack Black - Ref: E85F9670782A",
+    "callback_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php",
+    "return_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=E85F9670782A",
+    "customer": {
+        "email": "jackblack@gmail.com",
+        "phone": "876821594",
+        "name": "Jack Black"
+    },
+    "payment_method": 4
+}
+RESPONSE: {"status":"success","data":{"id":"8469da6c-ea88-488e-a2e3-177e7946ea85","amount":"1.00","reference":"E85F9670782A","checkout_url":"https:\/\/paysuite.tech\/checkout\/8469da6c-ea88-488e-a2e3-177e7946ea85"}}
+
+2025-11-26 14:49:11 PAYLOAD: {
+    "amount": 1,
+    "currency": "MZN",
+    "reference": "5257FDE1B9EF",
+    "description": "Pedido de Jack Black - Ref: 5257FDE1B9EF",
+    "callback_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php",
+    "return_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=5257FDE1B9EF",
+    "customer": {
+        "email": "jackblack@gmail.com",
+        "phone": "876821594",
+        "name": "Jack Black"
+    },
+    "payment_method": 4
+}
+RESPONSE: {"status":"success","data":{"id":"9183b44e-fefa-42f5-9285-2377c412b3ec","amount":"1.00","reference":"5257FDE1B9EF","checkout_url":"https:\/\/paysuite.tech\/checkout\/9183b44e-fefa-42f5-9285-2377c412b3ec"}}
+
+2025-11-26 14:54:05 PAYLOAD: {
+    "amount": 1.1,
+    "currency": "MZN",
+    "reference": "32B45E6E705B",
+    "description": "Pedido de Jack Black - Ref: 32B45E6E705B",
+    "callback_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/API\/paysuite_callback.php",
+    "return_url": "https:\/\/undebated-man-unrelating.ngrok-free.dev\/Restaurante\/finalizar_pedido.php?ref=32B45E6E705B",
+    "customer": {
+        "email": "jackblack@gmail.com",
+        "phone": "876821594",
+        "name": "Jack Black"
+    },
+    "payment_method": 5
+}
+RESPONSE: {"status":"success","data":{"id":"11ed9e24-7f05-4f35-9a55-d80bb9a7de59","amount":"1.10","reference":"32B45E6E705B","checkout_url":"https:\/\/paysuite.tech\/checkout\/11ed9e24-7f05-4f35-9a55-d80bb9a7de59"}}
+

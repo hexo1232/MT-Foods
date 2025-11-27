@@ -59,9 +59,15 @@ if (!isset($_SESSION['usuario'])) {
 
         <!-- DROPDOWN PARA CIMA -->
         <div class="usuario-menu" id="menuPerfil">
-            <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>Editar Dados Pessoais</a>
-            <a href="alterar_senha2.php">Alterar Senha</a>
-            <a href="logout.php">Sair</a>
+            <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>
+            <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">    
+            Editar Dados Pessoais</a>
+            <a href="alterar_senha2.php">
+            <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">     
+            Alterar Senha</a>
+            <a href="logout.php">
+            <img class="iconelogout" src="icones/logout1.png" alt="Logout" title="Sair">    
+            Sair</a>
         </div>
 
     </div>
@@ -107,7 +113,7 @@ if (!isset($_SESSION['usuario'])) {
             while ($produto = $resultado->fetch_assoc()) {
                 $imagem = $produto['caminho_imagem'] ?: 'uploads/sem_imagem.png';
                 $categorias = $produto['categorias'] ?: 'Sem categoria';
-                echo "<div class='card'>
+                echo "<div class='card-produto'>
                         <img src='{$imagem}' alt='Imagem do Produto'>
                         <div class='info'>
                             <h3>" . htmlspecialchars($produto['nome_produto']) . "</h3>

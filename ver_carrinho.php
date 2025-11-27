@@ -381,8 +381,12 @@ elseif (!empty($_COOKIE['carrinho'])) {
             <div class="usuario-iniciais" style="background-color:<?= $corAvatar ?>;"><?= $iniciais ?></div>
             <div class="usuario-nome"><?= $nomeCompleto ?></div>
             <div class="menu-perfil" id="menuPerfil">
-              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">Editar Dados Pessoais</a>
-              <a href="alterar_senha2.php">Alterar Senha</a>
+              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">
+              <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+              Editar Dados Pessoais</a>
+              <a href="alterar_senha2.php">
+              <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">   
+              Alterar Senha</a>
               <a href="logout.php"><img class="iconelogout" src="icones/logout1.png"> Sair</a>
             </div>
           </div>

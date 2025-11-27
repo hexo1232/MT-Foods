@@ -269,8 +269,12 @@ while ($linha = $res->fetch_assoc()) {
             <div class="usuario-iniciais" style="background-color:<?= $corAvatar ?>;"><?= $iniciais ?></div>
             <div class="usuario-nome"><?= $nomeCompleto ?></div>
             <div class="menu-perfil" id="menuPerfil">
-              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">Editar Dados Pessoais</a>
-              <a href="alterar_senha2.php">Alterar Senha</a>
+              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">
+              <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+              Editar Dados Pessoais</a>
+              <a href="alterar_senha2.php">
+              <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">   
+              Alterar Senha</a>
               <a href="logout.php"><img class="iconelogout" src="icones/logout1.png"> Sair</a>
             </div>
           </div>
@@ -290,10 +294,10 @@ while ($linha = $res->fetch_assoc()) {
 
   <ul class="sidebar-links">
     <?php if ($usuario): ?>
-      <li><a href="cardapio.php<?= $admin_query_param ?>"><img class="" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar ao Cardápio</a></li>
+      <li><a href="cardapio.php<?= $admin_query_param ?>"><img class="icone2" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar ao Cardápio</a></li>
     <?php else: ?>
       <li><a href="login.php">Fazer Login</a></li>
-      <li><a href="cardapio.php"><img class="" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar</a></li>
+      <li><a href="cardapio.php"><img class="icone2" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar</a></li>
     <?php endif; ?>
   </ul>
 
@@ -537,12 +541,28 @@ $preco_base_format = number_format($preco_base, 2, ',', '.');
     </div>
 
 <script>
-    // Função para exibir o popup de sucesso
-    function mostrarPopup() {
-        const popup = document.getElementById('popup');
-        popup.style.display = 'flex';
-        setTimeout(() => popup.style.display = 'none', 3000);
-    }
+
+    
+  // Função para exibir o popup de sucesso na posição atual do usuário
+function mostrarPopup() {
+    const popup = document.getElementById('popup');
+    const popupContent = popup.querySelector('.popup-content');
+
+    // mostrar o popup
+    popup.style.display = 'flex';
+
+    // pegar posição atual do scroll
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+    // posicionar o conteúdo do popup na posição visível do usuário
+    popupContent.style.position = "absolute";
+    popupContent.style.top = (scrollTop + window.innerHeight / 2) + "px";
+    popupContent.style.left = "50%";
+    popupContent.style.transform = "translate(-50%, -50%)";
+
+    // esconder após 3 segundos
+    setTimeout(() => popup.style.display = 'none', 3000);
+}
 
     // Troca imagem principal ao clicar em miniaturas
     function trocarImagem(caminho) {

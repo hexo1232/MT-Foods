@@ -8,7 +8,9 @@ $conexao= new mysqli($host, $usuario, $password,$bd);
 
 if ($conexao->connect_error){
 
-    echo "Erro ao conectar á base de dados";
+
+    die("Erro ao conectar à base de dados: " . $conexao->connect_error);
+
 }
 
 

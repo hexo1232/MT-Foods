@@ -37,16 +37,33 @@ function iniciarPagamentoPaySuite($id_usuario, $valor, $metodo, $telefone, $emai
     // O $returnUrl já vem formatado de finalizar_pedido.php
     $callbackUrl = "https://undebated-man-unrelating.ngrok-free.dev/Restaurante/API/paysuite_callback.php";
 
+    // CORREÇÃO: Busca o nome do usuário para exibir no checkout
+    $stmt_user = $conexao->prepare("SELECT nome, apelido FROM usuario WHERE id_usuario = ?");
+    $stmt_user->bind_param("i", $id_usuario);
+    $stmt_user->execute();
+    $user_data = $stmt_user->get_result()->fetch_assoc();
+    $stmt_user->close();
+    
+    $nome_completo = trim(($user_data['nome'] ?? '') . ' ' . ($user_data['apelido'] ?? ''));
+    if (empty($nome_completo)) {
+        $nome_completo = "Cliente"; // Fallback caso não tenha nome
+    }
+
     // Monta payload da PaySuite
     $payload = [
         "amount" => $valor,
         "currency" => "MZN",
-        "reference" => $referencia, // Usa a referência do pedido_temp
+        "reference" => $referencia, // Identificador interno (não aparece no checkout)
+        
+        // ✅ CORREÇÃO PRINCIPAL: Campo que define o nome exibido no checkout
+        "description" => "Pedido de " . $nome_completo . " - Ref: " . $referencia,
+        
         "callback_url" => $callbackUrl,
         "return_url" => $returnUrl,
         "customer" => [
             "email" => $email,
-            "phone" => $telefone
+            "phone" => $telefone,
+            "name" => $nome_completo // Também adiciona o nome no objeto customer
         ],
         "payment_method" => $metodo
     ];
@@ -63,8 +80,13 @@ function iniciarPagamentoPaySuite($id_usuario, $valor, $metodo, $telefone, $emai
         ]
     ]);
     $response = curl_exec($ch);
-    file_put_contents(__DIR__ . "/paysuite_log.txt", date('Y-m-d H:i:s') . " RESPONSE: " . $response . PHP_EOL, FILE_APPEND);
-
+    
+    // Log melhorado para debug
+    file_put_contents(__DIR__ . "/paysuite_log.txt", 
+        date('Y-m-d H:i:s') . " PAYLOAD: " . json_encode($payload, JSON_PRETTY_PRINT) . PHP_EOL .
+        "RESPONSE: " . $response . PHP_EOL . PHP_EOL, 
+        FILE_APPEND
+    );
 
     if (curl_errno($ch)) {
         return [
@@ -93,3 +115,4 @@ function iniciarPagamentoPaySuite($id_usuario, $valor, $metodo, $telefone, $emai
         ];
     }
 }
+?>

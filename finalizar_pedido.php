@@ -1,4 +1,5 @@
 <?php
+ob_start();
 
 require_once "conexao.php";
 include "verifica_login_opcional.php";
@@ -363,6 +364,7 @@ $stmt_temp->bind_param("isiidissssi", // CORRIGIDO: Agora tem 8 caracteres
         echo "<p style='color:red;'>Erro: " . htmlspecialchars($e->getMessage()) . "</p>";
     }
 }
+    ob_end_flush();
 ?>
 
 <!DOCTYPE html>
@@ -417,8 +419,12 @@ $stmt_temp->bind_param("isiidissssi", // CORRIGIDO: Agora tem 8 caracteres
             <div class="usuario-iniciais" style="background-color:<?= $corAvatar ?>;"><?= $iniciais ?></div>
             <div class="usuario-nome"><?= $nomeCompleto ?></div>
             <div class="menu-perfil" id="menuPerfil">
-              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">Editar Dados Pessoais</a>
-              <a href="alterar_senha2.php">Alterar Senha</a>
+              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">
+              <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+              Editar Dados Pessoais</a>
+              <a href="alterar_senha2.php">
+              <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">   
+              Alterar Senha</a>
               <a href="logout.php"><img class="iconelogout" src="icones/logout1.png"> Sair</a>
             </div>
           </div>
@@ -611,7 +617,7 @@ $stmt_temp->bind_param("isiidissssi", // CORRIGIDO: Agora tem 8 caracteres
     <select name="metodo" id="metodo" onchange="mostrarFormularioPagamento()" required>
       <option value="">Selecione</option>
       <?php
-      $met = $conexao->query("SELECT * FROM tipo_pagamento");
+      $met = $conexao->query("SELECT * FROM tipo_pagamento where idtipo_pagamento in(3,4,5)");
       while ($m = $met->fetch_assoc()) {
           echo "<option value='{$m['idtipo_pagamento']}'>{$m['tipo_pagamento']}</option>";
       }

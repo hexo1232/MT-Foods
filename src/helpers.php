@@ -1,4 +1,5 @@
 <?php
+//src/helpers.php
 
 function generateToken(int $bytes = 32): string {
     return bin2hex(random_bytes($bytes));

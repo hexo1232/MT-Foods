@@ -180,8 +180,12 @@ if ($modo_admin) {
             <div class="usuario-nome"><?= $nomeCompleto ?></div>
 
             <div class="menu-perfil" id="menuPerfil">
-              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">Editar Dados Pessoais</a>
-              <a href="alterar_senha2.php">Alterar Senha</a>
+              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">
+              <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+              Editar Dados Pessoais</a>
+              <a href="alterar_senha2.php">
+              <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">   
+              Alterar Senha</a>
               <a href="logout.php">
                 <img class="iconelogout" src="icones/logout1.png" alt=""> Sair
               </a>
@@ -205,14 +209,14 @@ if ($modo_admin) {
     <?php if ($usuario): ?>
 
       <?php if ($is_admin): ?>
-        <li><a href="cardapio.php?modo=admin_pedido"><img class="" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar</a></li>
+        <li><a href="cardapio.php?modo=admin_pedido"><img class="icone2" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar</a></li>
       <?php else: ?>
-        <li><a href="cardapio.php"><img class="" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar</a></li>
+        <li><a href="cardapio.php"><img class="icone2" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar</a></li>
       <?php endif; ?>
 
     <?php else: ?>
       <li><a href="login.php">Fazer Login</a></li>
-      <li><a href="cardapio.php"> <img class="" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar</a></li>
+      <li><a href="cardapio.php"> <img class="icone2" src="icones/voltar1.png" alt="Logout" title="voltar"> Voltar</a></li>
     <?php endif; ?>
   </ul>
 

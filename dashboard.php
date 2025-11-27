@@ -36,6 +36,7 @@ if (!isset($_SESSION['usuario'])) {
   <title>Dashboard</title>
   <script src="logout_auto.js"></script>
   <link rel="stylesheet" href="css/admin.css">
+  <script src="js/alerta_estoque_inteligente.js"></script>
   <script src="js/darkmode2.js"></script>
     <script src="js/sidebar.js"></script>
 <script src="js/dropdown2.js"></script>
@@ -87,6 +88,25 @@ if (!isset($_SESSION['usuario'])) {
     float: right;
     margin-left: 10px;
 }
+
+/* Badge para a Sidebar */
+.badge-alerta {
+    background-color: #cc0000;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 8px;
+    vertical-align: middle;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(204, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(204, 0, 0, 0); }
+}
 /* FIM NOVO CÓDIGO CSS */
 </style>
 </head>
@@ -109,14 +129,16 @@ if (!isset($_SESSION['usuario'])) {
 
       <a href="ver_usuarios.php">Ver Usuários</a>
       <a href="ver_pratos.php">Ver Refeições</a>
-      <a href="ver_ingredientes.php">Ver Ingredientes</a>
+ <a href="ver_ingredientes.php" id="link-ver-ingredientes">
+    Ver Ingredientes <span id="badge-estoque" style="display:none;" class="badge-alerta">0</span>
+</a>
     
       <a href="cozinha_admin.php" id="link-cozinha">
         Monitorar Pedidos  
         <span id="contador-notificacao">  0 </span>
       </a>
       <a href="fidelidade.php">Ver Programa de Fidelidade</a>
-      <a href="ver_logs.php">Histórico de Logs</a>
+      <!-- <a href="ver_logs.php">Histórico de Logs</a> -->
       <a href="gerenciar_banner.php">Gerenciar Banners</a>
   
 
@@ -134,9 +156,16 @@ if (!isset($_SESSION['usuario'])) {
         </div>
 
         <div class="usuario-menu" id="menuPerfil">
-            <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>Editar Dados Pessoais</a>
-            <a href="alterar_senha2.php">Alterar Senha</a>
-            <a href="logout.php">Sair</a>
+            <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>
+            <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+            Editar Dados Pessoais</a>
+            <a href="alterar_senha2.php">
+            
+            <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar"> 
+            Alterar Senha</a>
+            <a href="logout.php">
+            <img class="iconelogout" src="icones/logout1.png" alt="Logout" title="Sair">  
+            Sair</a>
         </div>
 
     </div>
@@ -179,40 +208,56 @@ if (!isset($_SESSION['usuario'])) {
   </div>
 
 <script>
-    // Função para buscar e exibir o alerta de ingredientes via AJAX
+
+// Variável para controlar o "Soneca" do alerta
+    const TEMPO_SONECA_MS = 1000 * 60 * 30; // 30 minutos sem incomodar após fechar
+
     function atualizarAlertaIngredientes() {
         fetch('ajax_alerta_estoque.php')
             .then(response => response.json())
             .then(data => {
                 const alertas = data.alertas;
                 const tipoAlerta = data.tipo;
+                const badge = document.getElementById('badge-estoque');
 
-                // 1. Limpar pop-up existente (necessário antes de criar um novo)
-                document.querySelectorAll('.toast-ingrediente').forEach(t => t.remove());
-
+                // 1. ATUALIZAR O BADGE NA SIDEBAR (Sempre visível se houver problema)
                 if (alertas.length > 0) {
-                    // 2. Criar a lista de itens
+                    badge.textContent = alertas.length;
+                    badge.style.display = 'inline-block';
+                    // Opcional: Mudar cor baseada na gravidade
+                    badge.style.backgroundColor = (tipoAlerta === 'vermelho') ? '#cc0000' : '#ff9900';
+                } else {
+                    badge.style.display = 'none';
+                }
+
+                // 2. LÓGICA DO POP-UP (TOAST)
+                // Verifica se devemos mostrar o pop-up ou se o usuário já fechou recentemente
+                const ultimaVisualizacao = localStorage.getItem('alerta_estoque_fechado_em');
+                const agora = new Date().getTime();
+                const deveMostrar = !ultimaVisualizacao || (agora - ultimaVisualizacao > TEMPO_SONECA_MS);
+
+                // Se tiver alertas E (não tiver popup aberto) E (o tempo de soneca expirou)
+                if (alertas.length > 0 && !document.querySelector('.toast-ingrediente') && deveMostrar) {
+                    
                     let listaItens = alertas.map(item => `<li>${item.nome} (${item.estoque} unid.)</li>`).join('');
                     
-                    // 3. Criar e preencher o novo pop-up
                     const popup = document.createElement('div');
                     popup.className = `toast-ingrediente ${tipoAlerta}`; 
                     
                     popup.innerHTML = `
                         <button class="close-btn" aria-label="Fechar Alerta">&times;</button>
-                        <h4> ALERTA DE ESTOQUE - Reposição Urgente</h4>
-                        <p>Os seguintes ingredientes estão com estoque **${tipoAlerta === 'vermelho' ? 'CRÍTICO' : 'BAIXO'}**:</p>
-                        <ul>${listaItens}</ul>
-                        <a href="ver_ingredientes.php" style="color: white; text-decoration: underline; display: block; margin-top: 10px;">Ver Ingredientes em Estoque</a>
+                        <h4>⚠️ ATENÇÃO AO ESTOQUE</h4>
+                        <p>Existem <strong>${alertas.length}</strong> ingredientes com estoque baixo.</p>
+                        <ul style="max-height: 100px; overflow-y: auto;">${listaItens}</ul>
+                        <a href="ver_ingredientes.php" style="color: white; text-decoration: underline; font-weight:bold; display: block; margin-top: 10px;">Resolver Agora</a>
                     `;
                     
                     document.body.appendChild(popup);
-                    
-                    // 4. Exibir
                     setTimeout(() => popup.classList.add('show'), 100);
 
-                    // 5. Adicionar funcionalidade de fechar manualmente (será reaberto no próximo intervalo se o alerta persistir)
+                    // Ao fechar, salvamos o Timestamp no LocalStorage
                     popup.querySelector('.close-btn').addEventListener('click', function() {
+                        localStorage.setItem('alerta_estoque_fechado_em', new Date().getTime());
                         popup.classList.remove('show');
                         setTimeout(() => popup.remove(), 500); 
                     });

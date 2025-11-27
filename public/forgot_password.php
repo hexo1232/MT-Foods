@@ -1,5 +1,5 @@
 <?php require_once __DIR__ . '/../src/helpers.php'; ?>
-
+<!-- public/forgot_password.php -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>

@@ -213,9 +213,7 @@ if (stripos($produto['categorias_nomes'], 'Promoções da semana') !== false) {
 
         <?php if ($is_admin): ?>
           <a href="cardapio.php?modo=admin_pedido"><img class="icone2" src="icones/voltar1.png" alt="Logout" title="voltar">Voltar</a>
-          <a href="logout.php">
-            <img id="iconelogout" src="icones/logout1.png" alt="Logout" title="Fazer Logout">
-          </a>
+          
         <?php else: ?>
           <a href="cardapio.php"><img class="icone2" src="icones/voltar1.png" alt="Logout" title="voltar">Voltar</a>
           <a href="logout.php"></a>
@@ -261,8 +259,12 @@ if (stripos($produto['categorias_nomes'], 'Promoções da semana') !== false) {
             <div class="usuario-nome"><?= $nomeCompleto ?></div>
 
             <div class="menu-perfil" id="menuPerfil">
-              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">Editar Dados Pessoais</a>
-              <a href="alterar_senha2.php">Alterar Senha</a>
+              <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">
+              <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">  
+              Editar Dados Pessoais</a>
+              <a href="alterar_senha2.php">
+              <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">   
+              Alterar Senha</a>
               <a href="logout.php">
                 <img class="iconelogout" src="icones/logout1.png" alt=""> Sair
               </a>
@@ -289,11 +291,11 @@ if (stripos($produto['categorias_nomes'], 'Promoções da semana') !== false) {
 
       <?php if ($is_admin): ?>
         <li><a href="cardapio.php?modo=admin_pedido">Voltar</a></li>
-        <li><a href="logout.php"><span>🚪</span> Logout</a></li>
+        <!-- <li><a href="logout.php"><span>🚪</span> Logout</a></li> -->
 
       <?php else: ?>
         <li><a href="cardapio.php">Voltar</a></li>
-        <li><a href="logout.php"><span>🚪</span> Logout</a></li>
+        <!-- <li><a href="logout.php"><span>🚪</span> Logout</a></li> -->
       <?php endif; ?>
 
     <?php else: ?>

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
       <link rel="stylesheet" href="css/index.css">
+       <link rel="stylesheet" href="css/creditos.css">
 
     <style>
         /* Animação de entrada suave para a página */
@@ -135,6 +136,7 @@
       <a href="cardapio.php">Cardápio</a>
       <a href="acerca_de_nos.php">Acerca de Nós</a>
       <a href="ajuda.php" class="active">Ajuda</a>
+       <a href="contactos.php">Contactos</a>
     </nav>
 
     <!-- 🔹 BOTÃO MOBILE -->
@@ -147,6 +149,7 @@
     <a href="cardapio.php">Cardápio</a>
     <a href="acerca_de_nos.php">Acerca de Nós</a>
     <a href="ajuda.php" class="active">Ajuda</a>
+     <a href="contactos.php">Contactos</a>
   </nav>
 </header>
 

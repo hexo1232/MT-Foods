@@ -181,11 +181,11 @@ if (isset($stmt)) {
     <br><br>
     
            <?php if ($idperfil==1): ?>
-    <a href="ver_usuarios.php">Voltar aos Usuários</a>
+    <a href="ver_usuarios.php"><img class="icone2" src="icones/voltar2.png" alt="Logout" title="voltar">Voltar aos Usuários</a>
 <?php elseif($idperfil==2): ?>
- <a href="dashboard.php">Voltar á Cozinha</a>
+ <a href="dashboard.php"><img class="icone2" src="icones/voltar2.png" alt="Logout" title="voltar">Voltar á Cozinha</a>
     <?php else: ?>
-<a href="cardapio.php">Voltar ao Cardápio</a>
+<a href="cardapio.php"><img class="icone2" src="icones/voltar2.png" alt="Logout" title="voltar">Voltar ao Cardápio</a>
        <?php endif; ?>
    
        <!-- ===== PERFIL NO FUNDO DA SIDEBAR ===== -->
@@ -204,9 +204,10 @@ if (isset($stmt)) {
 
         <!-- DROPDOWN PARA CIMA -->
         <div class="usuario-menu" id="menuPerfil">
-            <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>Editar Dados Pessoais</a>
-            <a href="alterar_senha2.php">Alterar Senha</a>
-            <a href="logout.php">Sair</a>
+          
+            <a href="logout.php">
+            <img class="iconelogout" src="icones/logout1.png" alt="Logout" title="Sair">    
+            Sair</a>
         </div>
 
     </div>

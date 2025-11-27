@@ -59,6 +59,7 @@ if ($banner_ativo) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/index.css">
+     <link rel="stylesheet" href="css/creditos.css">
 
     <style>
         /* Paleta de Cores: Preto (#2b2b2b), Laranja (#ffb300) */
@@ -141,6 +142,7 @@ if ($banner_ativo) {
             <a href="cardapio.php">Cardápio</a>
             <a href="acerca_de_nos.php" class="active">Acerca de Nós</a>
             <a href="ajuda.php">Ajuda</a>
+             <a href="contactos.php">Contactos</a>
         </nav>
 
         <button class="menu-btn" id="menuBtnMobile">&#9776;</button>
@@ -151,6 +153,7 @@ if ($banner_ativo) {
         <a href="cardapio.php">Cardápio</a>
         <a href="acerca_de_nos.php" class="active">Acerca de Nós</a>
         <a href="ajuda.php">Ajuda</a>
+         <a href="contactos.php">Contactos</a>
     </nav>
 </header>
 

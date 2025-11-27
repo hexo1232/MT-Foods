@@ -1,4 +1,6 @@
 <?php 
+
+//public/updae_password.php
 require_once __DIR__ . '/../src/PasswordReset.php';
 
 $token = $_POST['token'] ?? '';

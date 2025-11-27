@@ -1,4 +1,5 @@
 <?php
+//historico_compras.php
 include "conexao.php";
 require_once "require_login.php";
 
@@ -14,18 +15,16 @@ if (!isset($_SESSION['usuario'])) {
 $modo_admin = ($_GET['modo'] ?? '') === 'admin_pedido';
 $admin_query_param = $modo_admin ? '?modo=admin_pedido' : '';
 
-// A variável de sessão pode ser um array ou um valor simples, então é mais seguro extrair o ID.
 $usuario = $_SESSION['usuario'] ?? null;
 $id_usuario = $usuario['id_usuario'] ?? 0;
 $is_admin = ($usuario && ($usuario['idperfil'] ?? 0) == 1); 
 
 if ($id_usuario) {
     try {
-        // Marca todos os pedidos 'entregue' do usuário como VISTOS (1)
         $stmt = $conexao->prepare("
             UPDATE pedido 
             SET notificacao_vista = 1 
-            WHERE id_usuario = ? AND status_pedido = 'entregue' AND notificacao_vista = 0
+            WHERE id_usuario = ? AND status_pedido IN ('entregue', 'servido') AND notificacao_vista = 0
         ");
         $stmt->bind_param("i", $id_usuario);
         $stmt->execute();
@@ -34,15 +33,14 @@ if ($id_usuario) {
     }
 }
 
-
-// --- NOVO: LÓGICA DE FILTRAGEM DE DATAS ---
+// LÓGICA DE FILTRAGEM DE DATAS
 $filtro_data = $_GET['filtro'] ?? 'todos';
 $sql_filtro = "";
 $data_hoje = date('Y-m-d');
 $data_semana_passada = date('Y-m-d', strtotime('-7 days'));
 $data_mes_passado = date('Y-m-d', strtotime('first day of last month'));
-$data_tres_meses = date('Y-m-d', strtotime('-3 months')); // NOVO
-$data_seis_meses = date('Y-m-d', strtotime('-6 months')); // NOVO
+$data_tres_meses = date('Y-m-d', strtotime('-3 months'));
+$data_seis_meses = date('Y-m-d', strtotime('-6 months'));
 
 switch ($filtro_data) {
     case 'diario':
@@ -66,8 +64,6 @@ switch ($filtro_data) {
         $filtro_data = 'todos';
         break;
 }
-// --- FIM LÓGICA FILTRO ---
-
 
 $pedidos = [];
 $ids_pedidos = [];
@@ -76,15 +72,17 @@ $itens_por_pedido = [];
 $personalizacoes_por_item = [];
 
 try {
-    // 1. Busca todos os pedidos do usuário (visíveis) com o filtro de data
+    // Busca pedidos incluindo data_fim_pedido
     $sql_pedidos = "
-        SELECT p.*, tp.tipo_pagamento, t.nome_tipo_entrega
+        SELECT p.*, tp.tipo_pagamento, t.nome_tipo_entrega,
+               p.data_fim_pedido, t.preco_adicional, p.idtipo_entrega, p.idtipo_origem_pedido, p.idtipo_pagamento,
+               TIMESTAMPDIFF(MINUTE, p.data_pedido, p.data_fim_pedido) AS duracao_minutos
         FROM pedido p
         JOIN tipo_pagamento tp ON p.idtipo_pagamento = tp.idtipo_pagamento
         JOIN tipo_entrega t ON p.idtipo_entrega = t.idtipo_entrega
         WHERE p.id_usuario = ? 
         AND p.oculto_cliente = FALSE 
-        AND p.status_pedido = 'entregue'
+        AND p.status_pedido IN ('entregue', 'servido')
         $sql_filtro 
         ORDER BY p.data_pedido DESC
     ";
@@ -99,7 +97,7 @@ try {
         $ids_pedidos[] = $pedido['id_pedido'];
     }
 
-    // 2. Busca todos os itens
+    // Busca itens (mantido)
     if (!empty($ids_pedidos)) {
         $placeholders_pedidos = implode(',', array_fill(0, count($ids_pedidos), '?'));
         $sql_itens = "
@@ -122,7 +120,7 @@ try {
         }
     }
 
-    // 3. Busca todas as personalizações
+    // Busca personalizações (mantido)
     if (!empty($ids_itens)) {
         $placeholders_itens = implode(',', array_fill(0, count($ids_itens), '?'));
         $sql_pers = "
@@ -154,7 +152,7 @@ try {
         }
     }
 
-    // 4. Organiza todos os dados na estrutura final para o HTML
+    // Organiza dados
     foreach ($pedidos as $id_pedido => &$pedido) {
         $pedido['itens'] = $itens_por_pedido[$id_pedido] ?? [];
         foreach ($pedido['itens'] as &$item) {
@@ -169,6 +167,22 @@ try {
     echo "<p style='color:red;'>Erro ao carregar histórico de compras: " . $e->getMessage() . "</p>";
     exit;
 }
+
+// Função para formatar duração
+function formatarDuracao($minutos) {
+    if ($minutos === null || $minutos < 0) {
+        return "N/A";
+    }
+    
+    $horas = floor($minutos / 60);
+    $mins = $minutos % 60;
+    
+    if ($horas > 0) {
+        return "{$horas}h {$mins}min";
+    } else {
+        return "{$mins}min";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -182,7 +196,6 @@ try {
     <script src="js/dropdown.js"></script> 
     <script src="js/sidebar2.js"></script> 
     <style>
-        /* Estilos adicionais para os filtros e botões de impressão */
         .filtros {
             margin: 20px 20px 10px 20px;
             padding: 10px;
@@ -209,14 +222,14 @@ try {
             background-color: var(--button-bg-color);
         }
         .filtros button.active {
-            background-color: #4CAF50; /* Cor primária */
+            background-color: #4CAF50;
             color: white;
         }
         .filtros button:not(.active):hover {
             background-color: var(--button-hover-color);
         }
         .print-btn-lote {
-            background-color: #007bff; /* Cor para impressão em lote */
+            background-color: #007bff;
             color: white !important;
         }
         .print-btn-lote:hover {
@@ -245,7 +258,35 @@ try {
             gap: 10px;
         }
         .acoes {
-            margin: 10px 20px; /* Ajusta a margem para não interferir com os filtros */
+            margin: 10px 20px;
+        }
+        
+        /* NOVO: Estilos para duração */
+        .pedido-duracao {
+                        background:  #ffc107;
+            color: black;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+              position: absolute;
+                  right: 0;
+  
+        }
+        
+        .pedido-timestamps {
+            font-size: 0.85em;
+            color: var(--text-color-secondary, #666);
+            margin-top: 8px;
+            padding: 8px;
+            background: var(--background-light, #f8f9fa);
+            border-radius: 5px;
+        }
+        
+        .pedido-timestamps strong {
+            color: var(--text-color);
         }
     </style>
 </head>
@@ -288,8 +329,12 @@ try {
                         <div class="usuario-iniciais" style="background-color:<?= $corAvatar ?>;"><?= $iniciais ?></div>
                         <div class="usuario-nome"><?= $nomeCompleto ?></div>
                         <div class="menu-perfil" id="menuPerfil">
-                            <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">Editar Dados Pessoais</a>
-                            <a href="alterar_senha2.php">Alterar Senha</a>
+                            <a href="editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>">
+                            <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">    
+                            Editar Dados Pessoais</a>
+                            <a href="alterar_senha2.php">
+                            <img class="icone" src="icones/cadeado1.png" alt="Alterar" title="Alterar">     
+                            Alterar Senha</a>
                             <a href="logout.php"><img class="iconelogout" src="icones/logout1.png"> Sair</a>
                         </div>
                     </div>
@@ -306,12 +351,11 @@ try {
     </div>
     <ul class="sidebar-links">
        <?php if ($is_admin): ?>
-                     <li><a href="cardapio.php?modo=admin_pedido"><img class="icone2" src="icones/voltar1.png" alt="Voltar" title="Voltar">Voltar</a> </li>
-                <?php else: ?>
-
-        <li><a href="cardapio.php"> <img class="icone2" src="icones/voltar1.png" alt="Voltar" title="Voltar"> Voltar</a></li>
+            <li><a href="cardapio.php?modo=admin_pedido"><img class="icone2" src="icones/voltar1.png" alt="Voltar" title="Voltar">Voltar</a> </li>
+        <?php else: ?>
+            <li><a href="cardapio.php"> <img class="icone2" src="icones/voltar1.png" alt="Voltar" title="Voltar"> Voltar</a></li>
+        <?php endif; ?>
     </ul>
-      <?php endif; ?>
 
     <?php if ($usuario): ?>
         <div class="sidebar-user-section">
@@ -339,7 +383,6 @@ try {
 </nav>
 
 <div id="menuOverlay" class="menu-overlay hidden"></div>
-
 
 <div class="conteudo">
 
@@ -388,14 +431,27 @@ try {
         </div>
         <form id="formPedidos">
             
-            <?php foreach ($pedidos as $pedido): ?>
+            <?php foreach ($pedidos as $pedido):
+                    $id_tipo_entrega = intval($pedido['idtipo_entrega'] ?? 0);
+        $id_tipo_origem = intval($pedido['idtipo_origem_pedido'] ?? 0);
+        $idtipo_pagamento = intval($pedido['idtipo_pagamento'] ?? 0);
+                
+                ?>
                 <div class="pedido-card" data-id="<?= htmlspecialchars($pedido['id_pedido']) ?>">
                     <div class="pedido-header">
                         <div>
                             <input type="checkbox" name="pedidos[]" value="<?= $pedido['id_pedido'] ?>">
                             <strong>Pedido número <?= $pedido['id_pedido'] ?></strong> - <?= htmlspecialchars($pedido['status_pedido']) ?>
+                            <span class="pedido-duracao">
+                                Duração do Atendimento: <?= formatarDuracao($pedido['duracao_minutos']) ?>
+                            </span>
                         </div>
-                        <div><?= (new DateTime($pedido['data_pedido']))->format('d/m/Y H:i') ?></div>
+                        <!-- <div><?= (new DateTime($pedido['data_pedido']))->format('d/m/Y H:i') ?></div> -->
+                    </div>
+                    
+                    <div class="pedido-timestamps">
+                        <strong>Início:</strong> <?= (new DateTime($pedido['data_pedido']))->format('d/m/Y H:i:s') ?> |
+                        <strong>Fim:</strong> <?= $pedido['data_fim_pedido'] ? (new DateTime($pedido['data_fim_pedido']))->format('d/m/Y H:i:s') : 'N/A' ?>
                     </div>
                 
                     <div>
@@ -409,6 +465,9 @@ try {
                                         <p><b>Entrega:</b> <?= htmlspecialchars($pedido['nome_tipo_entrega']) ?></p>
                                         <strong>Pagamento:</strong> <?= htmlspecialchars($pedido['tipo_pagamento']) ?><br>
                                         <p>Preço do item: <?= number_format($item['subtotal'], 2, ',', '.') ?> MT</p>
+                                         <?php if ($id_tipo_entrega === 2): ?>
+                <p>Taxa de Entrega: <strong><?= number_format($pedido['preco_adicional'] ?? 0, 2, ',', '.') ?> MT</strong> </p>
+                    <?php endif?>
 
                                         <?php if (!empty($item['ingredientes_incrementados'])): ?>
                                             <div class="personalizacoes">
@@ -452,6 +511,7 @@ try {
                     </div>
                     <div class="pedido-footer">
                         <strong>Total pago:</strong> <?= number_format($pedido['total'], 2, ',', '.') ?> MZN
+                         
                         <button type="button" class="print-btn-individual" 
                             onclick="imprimirFaturaIndividual(<?= $pedido['id_pedido'] ?>)">
                             Imprimir Fatura
@@ -467,13 +527,11 @@ try {
     </div>
 
     <script>
-        // Selecionar todos os pedidos (Mantido)
         document.getElementById("selectAll").addEventListener("change", function() {
             const checkboxes = document.querySelectorAll("input[name='pedidos[]']");
             checkboxes.forEach(cb => cb.checked = this.checked);
         });
 
-        // Função para ocultar pedidos (Mantido)
         function ocultarSelecionados() {
             const form = document.getElementById("formPedidos");
             const formData = new FormData(form);
@@ -489,7 +547,7 @@ try {
             .then(resp => resp.json())
             .then(data => {
                 if (data.success) {
-                    location.reload(); // Atualiza página para refletir mudanças
+                    location.reload();
                 } else {
                     alert("Erro ao ocultar pedidos!");
                 }
@@ -497,23 +555,13 @@ try {
             .catch(err => console.error(err));
         }
 
-        /**
-         * Abre a janela de impressão para uma fatura individual.
-         * @param {number} id_pedido O ID do pedido a ser impresso.
-         */
         function imprimirFaturaIndividual(id_pedido) {
             const url = `gerar_fatura.php?id_pedido=${id_pedido}`;
-            // Abre em uma nova janela para forçar a impressão
             window.open(url, '_blank', 'width=800,height=600'); 
         }
 
-        /**
-         * Abre a janela de impressão para um lote de faturas, baseado no filtro de data.
-         * @param {string} filtro O filtro de data.
-         */
         function imprimirFaturaLote(filtro) {
             const url = `gerar_fatura.php?filtro=${filtro}&lote=true`;
-            // Abre em uma nova janela para forçar a impressão
             window.open(url, '_blank', 'width=800,height=600'); 
         }
     </script>

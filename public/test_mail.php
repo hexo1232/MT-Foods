@@ -1,4 +1,6 @@
 <?php
+
+//public/test_mail.php
 require_once __DIR__ . '/../config/env_loader.php';
 require_once __DIR__ . '/../config/mailer.php';
 
