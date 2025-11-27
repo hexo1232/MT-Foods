@@ -39,11 +39,15 @@ function sendPasswordResetLink(PDO $pdo, string $email) {
     }
 
     try {
+        error_log("[DEBUG] Usuário encontrado: ID " . $user['id_usuario']);
+        
         $id_usuario = $user['id_usuario'];
         $token = generateToken(32);
         $tokenHash = hashToken($token);
         $expires = (new DateTime('+1 hour'))->format('Y-m-d H:i:s');
 
+        error_log("[DEBUG] Token gerado, salvando no banco...");
+        
         // Remove tokens antigos do mesmo usuário
         $pdo->prepare("DELETE FROM password_resets WHERE id_usuario = ?")->execute([$id_usuario]);
 
@@ -53,10 +57,14 @@ function sendPasswordResetLink(PDO $pdo, string $email) {
             VALUES (?, ?, ?)
         ")->execute([$id_usuario, $tokenHash, $expires]);
 
+        error_log("[DEBUG] Token salvo, preparando email...");
+        
         // Envia email
         $mail = getMailer();
         $resetLink = rtrim($_ENV['APP_URL'], '/') . '/public/reset_password.php?token=' . urlencode($token);
 
+        error_log("[DEBUG] Configurando destinatário: $email");
+        
         $mail->addAddress($email);
         $mail->Subject = "Redefinição de Palavra-passe";
         $mail->Body = "
@@ -66,11 +74,15 @@ function sendPasswordResetLink(PDO $pdo, string $email) {
             <p>Se não foi você, ignore este e-mail.</p>
         ";
         
+        error_log("[DEBUG] Tentando enviar email...");
+        
         if (!$mail->send()) {
-            error_log("Erro ao enviar email: " . $mail->ErrorInfo);
-            throw new Exception("Falha ao enviar email");
+            error_log("[ERRO] Falha no envio: " . $mail->ErrorInfo);
+            throw new Exception("Falha ao enviar email: " . $mail->ErrorInfo);
         }
 
+        error_log("[DEBUG] Email enviado com sucesso!");
+        
         return $response;
         
     } catch (Exception $e) {
