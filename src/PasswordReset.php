@@ -59,26 +59,21 @@ function sendPasswordResetLink(PDO $pdo, string $email) {
 
         error_log("[DEBUG] Token salvo, preparando email...");
         
-        // Envia email
-        $mail = getMailer();
+        // Envia email via API HTTP
         $resetLink = rtrim($_ENV['APP_URL'], '/') . '/public/reset_password.php?token=' . urlencode($token);
 
-        error_log("[DEBUG] Configurando destinatário: $email");
+        error_log("[DEBUG] Enviando email para: $email");
         
-        $mail->addAddress($email);
-        $mail->Subject = "Redefinição de Palavra-passe";
-        $mail->Body = "
+        $emailBody = "
             <p>Olá,</p>
             <p>Recebemos um pedido para redefinir a sua palavra-passe.</p>
             <p><a href='{$resetLink}'>Clique aqui para redefinir</a> (válido por 1 hora)</p>
             <p>Se não foi você, ignore este e-mail.</p>
         ";
         
-        error_log("[DEBUG] Tentando enviar email...");
-        
-        if (!$mail->send()) {
-            error_log("[ERRO] Falha no envio: " . $mail->ErrorInfo);
-            throw new Exception("Falha ao enviar email: " . $mail->ErrorInfo);
+        if (!sendEmail($email, "Redefinição de Palavra-passe", $emailBody)) {
+            error_log("[ERRO] Falha ao enviar email");
+            throw new Exception("Falha ao enviar email");
         }
 
         error_log("[DEBUG] Email enviado com sucesso!");
