@@ -21,7 +21,7 @@ $id_produto = intval($_GET['id']);
 $mensagem = "";
 $houveAlteracao = false;
 
-// 🆕 NOVIDADE: Buscar o ID da categoria 'Promoções da Semana' para usar na lógica condicional
+// 🆕 Buscar o ID da categoria 'Promoções da Semana' para usar na lógica condicional
 $id_promocao = null;
 $stmt_promocao = $conexao->prepare("SELECT id_categoria FROM categoria WHERE nome_categoria = ?");
 $nome_promocao = "Promoções da Semana";
@@ -112,9 +112,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $id_categoriadoingrediente = filter_var($_POST['categoriadoingrediente'], FILTER_VALIDATE_INT);
         
         // ---------------------------------------------------------
-        // 🔧 CORREÇÃO RAILWAY: Lógica Robusta para Preço Promocional
+        // 🔧 CORREÇÃO DO ERRO "CANNOT BE NULL"
         // ---------------------------------------------------------
-        $preco_promocional = null; // Padrão é NULL
+        // O banco de dados exige um valor DECIMAL, não aceita NULL.
+        // Definimos 0.00 como padrão se não houver promoção.
+        $preco_promocional = 0.00; 
 
         // Verifica se a categoria de promoção está marcada
         $is_promo_ativa = ($id_promocao && in_array($id_promocao, $categorias_selecionadas));
@@ -125,9 +127,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($valor_input !== '') {
                 $preco_promocional = floatval($valor_input);
             }
-            // Se estiver vazio (''), permanece null
         }
-        // Se a categoria NÃO estiver marcada, permanece null
+        // Se a categoria NÃO estiver marcada, $preco_promocional continua sendo 0.00
 
         // Verifica duplicidade de nome (exceto o próprio)
         $verifica = $conexao->prepare("SELECT COUNT(*) FROM produto WHERE nome_produto = ? AND id_produto != ?");
@@ -143,7 +144,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $conexao->rollback();
         } else {
             // Atualiza os dados principais do produto
-            // Usamos 'd' para double/decimal no bind_param para o preço promocional
             $stmt = $conexao->prepare("UPDATE produto SET nome_produto=?, descricao=?, preco=?, preco_promocional=? WHERE id_produto=?");
             $stmt->bind_param("ssdsi", $nome, $descricao, $preco, $preco_promocional, $id_produto);
             $stmt->execute();
@@ -192,7 +192,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
             
             // ---------------------------------------------------------
-            // 🔧 CORREÇÃO IMAGEM: Lógica da Imagem Principal
+            // 🔧 Lógica da Imagem Principal
             // ---------------------------------------------------------
             
             // 1. Verifica se JÁ existe uma imagem principal no banco para este produto
@@ -201,7 +201,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $tem_principal_no_banco = ($row_main['qtd'] > 0);
 
             // 2. Verifica se o usuário alterou a principal via Radio Button (Imagens existentes ou novas)
-            // O value do radio button pode ser o ID (ex: "45") ou um índice de nova imagem (ex: "nova_imagem_0")
             $radio_selecionado = $_POST['imagem_principal'] ?? null;
 
             // Se for um ID numérico (imagem existente), atualiza
@@ -224,8 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             $legenda = $_POST['legenda'][$index] ?? '';
                             $imagem_principal = 0;
 
-                            // LÓGICA DE CORREÇÃO:
-                            // Se o usuário selecionou ESTA nova imagem específica no radio button
+                            // Se o usuário selecionou ESTA nova imagem no radio button
                             if ($radio_selecionado === "nova_imagem_" . $index) {
                                 $conexao->query("UPDATE produto_imagem SET imagem_principal = 0 WHERE id_produto = $id_produto");
                                 $imagem_principal = 1;
@@ -306,7 +304,7 @@ if (isset($_GET['remover_imagem'])) {
     }
 }
 
-// 🆕 NOVIDADE: Adicionado preco_promocional na consulta
+// NOVIDADE: Adicionado preco_promocional na consulta
 $stmt = $conexao->prepare("SELECT nome_produto, descricao, preco, preco_promocional FROM produto WHERE id_produto = ?");
 $stmt->bind_param("i", $id_produto);
 $stmt->execute();
