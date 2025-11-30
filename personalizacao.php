@@ -1,4 +1,5 @@
 <?php
+//personalizacao.php, para itens personalizados
 session_start();
 include "conexao.php";
 include "verifica_login_opcional.php"; 
@@ -813,4 +814,5 @@ function mostrarPopup() {
 </script>
 
 </body>
+
 </html>
