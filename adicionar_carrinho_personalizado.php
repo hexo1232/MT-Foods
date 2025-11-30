@@ -4,8 +4,8 @@ session_start();
 // Inclui o arquivo de conexão com o banco de dados.
 include "conexao.php";
 
-//adicionar_carrinho_personalizado.php, para itens personalizados
 
+//adicionar_carrinho_personalizado.php, para itens personalizados
 // --- 1. RECEBENDO E VALIDANDO OS DADOS DO POST ---
 
 // Recebe e valida os dados básicos do POST.
@@ -219,5 +219,4 @@ if (isset($stmt)) $stmt->close();
 if (isset($stmt_ing)) $stmt_ing->close();
 // Fechar a conexão principal
 if (isset($conexao)) $conexao->close();
-
 ?>
