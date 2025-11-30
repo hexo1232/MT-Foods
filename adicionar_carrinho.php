@@ -1,5 +1,6 @@
 <?php
 // Inicia a sessão e inclui a conexão com o banco de dados
+
 //adicionar_carrinho.php, para itens normais
 session_start();
 include "conexao.php";
@@ -71,5 +72,4 @@ if (isset($_SESSION['usuario']) && isset($_SESSION['usuario']['id_usuario'])) {
     http_response_code(200);
     exit;
 }
-
 ?>
