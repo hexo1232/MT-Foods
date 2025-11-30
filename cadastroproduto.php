@@ -93,11 +93,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $id_categoriadoingrediente = filter_var($_POST['categoriadoingrediente'], FILTER_VALIDATE_INT);
         $ingredientes = $_POST['ingredientes'] ?? [];
 
-        // 1. Verifica duplicidade
-        // ... (código inalterado)
+      
+       // 1. Verifica duplicidade
+        // ------------------------------------ ADICIONE ESTE BLOCO ------------------------------------
+        $stmt_check = $conexao->prepare("SELECT id_produto FROM produto WHERE nome_produto = ?");
+        $stmt_check->bind_param("s", $nome);
+        $stmt_check->execute();
+        $result = $stmt_check->get_result(); // <-- A variável $result é definida aqui
+        $stmt_check->close();
+        // ---------------------------------------------------------------------------------------------
 
-        if ($result->num_rows > 0) {
-            // ... (código inalterado)
+        if ($result->num_rows > 0) { // <-- Linha 99 agora pode acessar $result com segurança
+            $mensagem = "❌ Erro: Já existe um produto com o nome **" . htmlspecialchars($nome) . "**.";
         } else {
             // 2. Insere Produto (AGORA INCLUINDO preco_promocional)
             // A instrução foi alterada para incluir 'preco_promocional'
@@ -108,8 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stmt->execute();
             $id_produto = $conexao->insert_id;
             $stmt->close();
-
-
+            
             // 3. Insere Categorias
             if (!empty($categorias)) {
                 $stmt_cat = $conexao->prepare("INSERT INTO produto_categoria (id_produto, id_categoria) VALUES (?, ?)");
@@ -407,4 +413,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </script>
 </body>
 </html>
-
