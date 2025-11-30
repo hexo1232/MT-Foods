@@ -11,8 +11,10 @@ if (!isset($_SESSION['usuario'])) {
     header("Location: login.php");
     exit;
 }
-// Este bloco é o primeiro a ser executado para evitar que o HTML completo
-// seja renderizado na resposta AJAX.
+
+// =========================================================================
+// BLOCO AJAX (Retorna apenas o HTML dos ingredientes)
+// =========================================================================
 if (isset($_GET['ajax']) && $_GET['ajax'] === 'categorias2') {
     $id_categoriadoingrediente = $_GET['categoriadoingrediente'] ?? null;
 
@@ -68,13 +70,15 @@ if (isset($_GET['ajax']) && $_GET['ajax'] === 'categorias2') {
     exit;
 }
 
-// Inclui as informações do usuário e o restante do código HTML após o bloco AJAX
+// =========================================================================
+// LÓGICA DE CADASTRO (POST)
+// =========================================================================
+
 include "usuario_info.php"; 
 
 $mensagem = "";
 $redirecionar = false;
 
-// Lógica de processamento do formulário POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Inicia a transação
     $conexao->begin_transaction();
@@ -82,11 +86,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $nome = $_POST['nome'];
         $descricao = $_POST['descricao'];
         $preco = $_POST['preco'];
-        $categorias = $_POST['categorias'] ?? []; // Mantém o array
+        $categorias = $_POST['categorias'] ?? []; 
         $id_categoriadoingrediente = filter_var($_POST['categoriadoingrediente'], FILTER_VALIDATE_INT);
         $ingredientes = $_POST['ingredientes'] ?? [];
 
-        // Verifica se o produto já existe
+        // 1. Verifica duplicidade
         $stmt = $conexao->prepare("SELECT id_produto FROM produto WHERE nome_produto = ?");
         $stmt->bind_param("s", $nome);
         $stmt->execute();
@@ -97,15 +101,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $mensagem = "Já existe um produto com esse nome.";
             $conexao->rollback(); 
         } else {
-            // Insere o novo produto
-            $stmt = $conexao->prepare("INSERT INTO produto (nome_produto, descricao, preco) 
-                                         VALUES (?, ?, ?)");
+            // 2. Insere Produto (Assumindo que preco_promocional tem default 0 ou não é required no insert)
+            $stmt = $conexao->prepare("INSERT INTO produto (nome_produto, descricao, preco) VALUES (?, ?, ?)");
             $stmt->bind_param("ssd", $nome, $descricao, $preco);
             $stmt->execute();
             $id_produto = $conexao->insert_id;
             $stmt->close();
 
-            // Insere as categorias usando um loop para todas as selecionadas
+            // 3. Insere Categorias
             if (!empty($categorias)) {
                 $stmt_cat = $conexao->prepare("INSERT INTO produto_categoria (id_produto, id_categoria) VALUES (?, ?)");
                 foreach ($categorias as $id_categoria) {
@@ -115,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $stmt_cat->close();
             }
 
-            // Associa o produto aos ingredientes selecionados, com a quantidade
+            // 4. Insere Ingredientes
             $insere_ing = $conexao->prepare("INSERT INTO produto_ingrediente (id_produto, id_ingrediente, quantidade_ingrediente) VALUES (?, ?, ?)");
             foreach ($ingredientes as $id_ingrediente => $qtd_ingrediente) {
                 if ($qtd_ingrediente > 0) {
@@ -125,45 +128,67 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
             $insere_ing->close();
             
-            // Upload das imagens
-            $stmt_img = $conexao->prepare("INSERT INTO produto_imagem (id_produto, caminho_imagem, legenda, imagem_principal)
-                                            VALUES (?, ?, ?, ?)");
-            foreach ($_FILES['imagens']['tmp_name'] as $index => $tmp_name) {
-                if (!empty($tmp_name)) {
-                    $nome_arquivo = basename($_FILES['imagens']['name'][$index]);
-                    $destino = "uploads/" . time() . "_" . $nome_arquivo;
+            // 5. Upload das imagens (COM A NOVA LÓGICA)
+            $stmt_img = $conexao->prepare("INSERT INTO produto_imagem (id_produto, caminho_imagem, legenda, imagem_principal) VALUES (?, ?, ?, ?)");
+            
+            // Verifica/Cria diretório (Importante para Railway/Linux)
+            if (!is_dir('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
 
-                    if (move_uploaded_file($tmp_name, $destino)) {
-                        $legenda = $_POST['legenda'][$index] ?? '';
-                        $imagem_principal = (isset($_POST['imagem_principal']) && $_POST['imagem_principal'] == $index) ? 1 : 0;
-                        $stmt_img->bind_param("issi", $id_produto, $destino, $legenda, $imagem_principal);
-                        $stmt_img->execute();
+            // Variável para controlar se já definimos uma principal
+            $primeira_imagem_definida = false;
+            // Verifica se o usuário selecionou explicitamente alguma
+            $usuario_selecionou_principal = isset($_POST['imagem_principal']);
+
+            if (isset($_FILES['imagens']) && is_array($_FILES['imagens']['tmp_name'])) {
+                foreach ($_FILES['imagens']['tmp_name'] as $index => $tmp_name) {
+                    if (!empty($tmp_name) && is_uploaded_file($tmp_name)) {
+                        $nome_arquivo = basename($_FILES['imagens']['name'][$index]);
+                        // Adiciona uniqid para evitar sobreposição de nomes
+                        $destino = "uploads/" . uniqid() . "_" . time() . "_" . $nome_arquivo;
+
+                        if (move_uploaded_file($tmp_name, $destino)) {
+                            $legenda = $_POST['legenda'][$index] ?? '';
+                            $imagem_principal = 0;
+
+                            if ($usuario_selecionou_principal) {
+                                // Se o usuário escolheu, respeitamos a escolha (compara o index)
+                                if ($_POST['imagem_principal'] == $index) {
+                                    $imagem_principal = 1;
+                                    $primeira_imagem_definida = true;
+                                }
+                            } else {
+                                // Se o usuário NÃO escolheu nada, a primeira que passar aqui vira principal
+                                if (!$primeira_imagem_definida) {
+                                    $imagem_principal = 1;
+                                    $primeira_imagem_definida = true;
+                                }
+                            }
+
+                            $stmt_img->bind_param("issi", $id_produto, $destino, $legenda, $imagem_principal);
+                            $stmt_img->execute();
+                        }
                     }
                 }
             }
             $stmt_img->close();
 
-            // Associa cada categoria de produto com a categoria de ingrediente selecionada
+            // 6. Associa Categoria do Produto com Categoria de Ingrediente
             if (!empty($categorias) && $id_categoriadoingrediente) {
-                // Prepara as consultas SQL fora do loop
                 $stmt_check_assoc = $conexao->prepare("SELECT COUNT(*) FROM categoria_produto_ingrediente WHERE id_categoria = ? AND id_categoriadoingrediente = ?");
                 $stmt_assoc = $conexao->prepare("INSERT INTO categoria_produto_ingrediente (id_categoria, id_categoriadoingrediente) VALUES (?, ?)");
 
-                // Itera sobre CADA categoria no array
                 foreach ($categorias as $id_categoria) {
-                    // Vincula e executa a verificação
                     $stmt_check_assoc->bind_param("ii", $id_categoria, $id_categoriadoingrediente);
                     $stmt_check_assoc->execute();
                     $result_check = $stmt_check_assoc->get_result()->fetch_row()[0];
 
-                    // Apenas insere se a associação não existir
                     if ($result_check == 0) {
                         $stmt_assoc->bind_param("ii", $id_categoria, $id_categoriadoingrediente);
                         $stmt_assoc->execute();
                     }
                 }
-                
-                // Fecha as consultas preparadas após o loop
                 $stmt_check_assoc->close();
                 $stmt_assoc->close();
             }
@@ -175,11 +200,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } catch (Exception $e) {
         $conexao->rollback();
         error_log("Erro no cadastro de produto: " . $e->getMessage());
-        $mensagem = "Ocorreu um erro ao cadastrar o produto. Por favor, tente novamente.";
+        $mensagem = "Ocorreu um erro ao cadastrar o produto: " . $e->getMessage();
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt">
@@ -200,15 +224,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
 <button class="menu-btn">☰</button>
 
-<!-- Overlay -->
 <div class="sidebar-overlay"></div>
 
     <sidebar class="sidebar">
         <br><br>
         <a href="ver_pratos.php">Voltar ás Refeições</a>
         
-        <!-- ===== PERFIL NO FUNDO DA SIDEBAR ===== -->
-<div class="sidebar-user-wrapper">
+        <div class="sidebar-user-wrapper">
 
     <div class="sidebar-user" id="usuarioDropdown">
 
@@ -221,7 +243,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="usuario-apelido"><?= $apelido ?></div>
         </div>
 
-        <!-- DROPDOWN PARA CIMA -->
         <div class="usuario-menu" id="menuPerfil">
             <a href='editarusuario.php?id_usuario=<?= $usuario['id_usuario'] ?>'>
             <img class="icone" src="icones/user1.png" alt="Editar" title="Editar">    
@@ -236,7 +257,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     </div>
 
-    <!-- BOTÃO DE MODO ESCURO -->
     <img class="dark-toggle" id="darkToggle"
          src="icones/lua.png"
          alt="Modo Escuro"
@@ -264,9 +284,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <label>Categoria da refeição:</label>
     <div class="checkbox-group">
         <?php
-        // Supondo que a variável $cat já foi definida e contém o resultado da sua consulta
-                    $cat = $conexao->query("SELECT * FROM categoria");
-        if ($cat->num_rows > 0) {
+        $cat = $conexao->query("SELECT * FROM categoria");
+        if ($cat && $cat->num_rows > 0) {
             while ($c = $cat->fetch_assoc()) {
                 echo "<div class='categoria-item'>";
                 echo "<input type='checkbox' id='categoria_{$c['id_categoria']}' name='categorias[]' value='{$c['id_categoria']}'>";
@@ -295,8 +314,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </select><br><br>
             
             <div id="ingredientes-container">
-                <!-- Os ingredientes associados aparecerão aqui via AJAX -->
-            </div>
+                </div>
 
             <br>
             <button class="cadastrar" type="submit">Cadastrar Produto</button>
@@ -317,12 +335,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             const container = document.getElementById('imagens-container');
             const index = container.children.length;
             const div = document.createElement('div');
+            
+            // 🆕 Lógica Visual: Se for a primeira imagem (index 0), marca o radio como checked
+            const isChecked = (index === 0) ? 'checked' : '';
+
             div.innerHTML = `
                 <input type="file" name="imagens[]" required>
                 <input type="text" name="legenda[]" placeholder="Legenda da imagem">
                 <label>
                     Principal?
-                    <input type="radio" name="imagem_principal" value="${index}">
+                    <input type="radio" name="imagem_principal" value="${index}" ${isChecked}>
                 </label>
                 <br><br>
             `;
@@ -359,7 +381,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 const precoTotalElement = card.querySelector(".preco-total");
                 const precoBase = parseFloat(card.dataset.precoBase);
 
-                // Função interna para atualizar o preço total do ingrediente
                 const atualizarPreco = () => {
                     const quantidade = parseInt(inputQtd.value);
                     const precoTotal = quantidade * precoBase;
