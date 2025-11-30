@@ -111,7 +111,8 @@ if ($usuario_logado) {
 
                 $sql_preco_original = "SELECT subtotal, quantidade 
                                         FROM item_carrinho 
-                                        WHERE uuid = ? AND id_carrinho = ?";
+                                        WHERE ic.uuid = ? 
+  AND ic.id_carrinho IN (SELECT id_carrinho FROM carrinho WHERE id_usuario = ? AND status = 'activo')";
                 $stmt_preco = $conexao->prepare($sql_preco_original);
                 $stmt_preco->bind_param("si", $uuid_item_valido, $id_carrinho);
                 $stmt_preco->execute();
@@ -123,7 +124,8 @@ if ($usuario_logado) {
 
                     $sql_up = "UPDATE item_carrinho 
                                SET quantidade = ?, subtotal = ? 
-                               WHERE uuid = ? AND id_carrinho = ?";
+                             WHERE ic.uuid = ? 
+  AND ic.id_carrinho IN (SELECT id_carrinho FROM carrinho WHERE id_usuario = ? AND status = 'activo')";
 
                     $stmt_up = $conexao->prepare($sql_up);
                     $stmt_up->bind_param("idsi", $qtd_valida, $novo_subtotal, $uuid_item_valido, $id_carrinho);
@@ -686,3 +688,4 @@ elseif (!empty($_COOKIE['carrinho'])) {
 </script>
 </body>
 </html>
+
