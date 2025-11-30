@@ -1,26 +1,35 @@
-
 <?php
-ob_start(); // <--- LINHA NOVA: Inicia o buffer de saída para evitar erro de headers
+ob_start(); // Inicia o buffer de saída
+
 session_start();
 
-// Captura o perfil do usuário antes de destruir a sessão
-$idperfil = $_SESSION['usuario']['idperfil'] ?? null;
-// Usamos isset para evitar warning se a chave não existir
-$idperfil = isset($_SESSION['usuario']['idperfil']) ? $_SESSION['usuario']['idperfil'] : null;
+// -----------------------------------------------------------------
+// 💡 LÓGICA CORRIGIDA: Adiciona a verificação "if" que faltava.
+// A linha 20 do seu código original (que tinha "}") foi removida.
+// -----------------------------------------------------------------
 
-// ✅ Limpa somente os dados de login
-unset($_SESSION['usuario']);
+if (isset($_SESSION['usuario'])) {
 
-// Destrói a sessão completamente (opcional, mas recomendado para logout total)
-// session_destroy(); 
+    // Captura o perfil do usuário antes de destruir a sessão
+    $idperfil = $_SESSION['usuario']['idperfil'] ?? null;
 
-// 🔒 Fecha e salva a sessão
-session_write_close();
+    // ✅ Limpa somente os dados de login
+    unset($_SESSION['usuario']);
 
-} else {
-header("Location: index.php");
+    // 🔒 Fecha e salva a sessão
+    session_write_close();
+
+    // Redireciona com base no perfil (se for admin, redireciona para login, por exemplo)
+    if ($idperfil == 1) { // 1 = Admin, supondo que o login de admin seja diferente
+        header("Location: login.php");
+    } else {
+        header("Location: index.php");
+    }
+
+} else { // Usuário não estava logado, apenas redireciona para a página inicial
+    header("Location: index.php");
 }
 
-ob_end_flush(); // <--- LINHA NOVA: Envia o buffer e encerra
+ob_end_flush(); // Envia o buffer e encerra
 exit;
 ?>
