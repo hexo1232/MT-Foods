@@ -13,20 +13,28 @@ if (!empty($ids_categorias_destaque) && $conexao) {
     $ids_placeholders = implode(',', array_fill(0, count($ids_categorias_destaque), '?'));
 
     // ... (sua query SQL aqui) ...
-    $sql_destaques = "
-        SELECT 
-            c.id_categoria, 
-            c.nome_categoria,
-            pi.caminho_imagem
-        FROM categoria c
-        JOIN produto_categoria pc ON c.id_categoria = pc.id_categoria
-        JOIN produto p ON pc.id_produto = p.id_produto
-        LEFT JOIN produto_imagem pi ON p.id_produto = pi.id_produto AND pi.imagem_principal = 1
-        WHERE c.id_categoria IN ($ids_placeholders)
-        GROUP BY c.id_categoria
-        LIMIT 3
-    ";
-    
+$sql_destaques = "
+    SELECT 
+        c.id_categoria, 
+        c.nome_categoria,
+        (
+            SELECT 
+                pi.caminho_imagem 
+            FROM 
+                produto_categoria pc2
+            JOIN 
+                produto p2 ON pc2.id_produto = p2.id_produto
+            LEFT JOIN 
+                produto_imagem pi ON p2.id_produto = pi.id_produto AND pi.imagem_principal = 1
+            WHERE 
+                pc2.id_categoria = c.id_categoria
+            -- Limita a UM produto para ter certeza (pode adicionar ORDER BY p2.id_produto DESC/ASC para critério)
+            LIMIT 1 
+        ) AS caminho_imagem
+    FROM categoria c
+    WHERE c.id_categoria IN ($ids_placeholders)
+    LIMIT 3
+";
     // Preparar a instrução
     $stmt = $conexao->prepare($sql_destaques);
     
