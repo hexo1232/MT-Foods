@@ -37,11 +37,12 @@ if ($modo_admin) {
 
 
 // Busca produto com o preco_promocional
+// Busca produto com o preco_promocional
 $stmt = $conexao->prepare("
     SELECT 
         p.*,p.preco_promocional, p.preco,
         GROUP_CONCAT(c.nome_categoria SEPARATOR ', ') AS categorias_nomes,
-        img.caminho_imagem AS imagem_principal
+        MAX(img.caminho_imagem) AS imagem_principal 
     FROM
         produto p
     LEFT JOIN
@@ -54,6 +55,7 @@ $stmt = $conexao->prepare("
         p.id_produto = ?
     GROUP BY p.id_produto
 ");
+
 $stmt->bind_param("i", $id_produto);
 $stmt->execute();
 $produto = $stmt->get_result()->fetch_assoc();
