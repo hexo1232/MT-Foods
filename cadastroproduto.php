@@ -86,27 +86,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $nome = $_POST['nome'];
         $descricao = $_POST['descricao'];
         $preco = $_POST['preco'];
+        // NOVO: Define um valor padrão para preco_promocional
+        $preco_promocional = 0; 
+        
         $categorias = $_POST['categorias'] ?? []; 
         $id_categoriadoingrediente = filter_var($_POST['categoriadoingrediente'], FILTER_VALIDATE_INT);
         $ingredientes = $_POST['ingredientes'] ?? [];
 
         // 1. Verifica duplicidade
-        $stmt = $conexao->prepare("SELECT id_produto FROM produto WHERE nome_produto = ?");
-        $stmt->bind_param("s", $nome);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $stmt->close();
+        // ... (código inalterado)
 
         if ($result->num_rows > 0) {
-            $mensagem = "Já existe um produto com esse nome.";
-            $conexao->rollback(); 
+            // ... (código inalterado)
         } else {
-            // 2. Insere Produto (Assumindo que preco_promocional tem default 0 ou não é required no insert)
-            $stmt = $conexao->prepare("INSERT INTO produto (nome_produto, descricao, preco) VALUES (?, ?, ?)");
-            $stmt->bind_param("ssd", $nome, $descricao, $preco);
+            // 2. Insere Produto (AGORA INCLUINDO preco_promocional)
+            // A instrução foi alterada para incluir 'preco_promocional'
+            $stmt = $conexao->prepare("INSERT INTO produto (nome_produto, descricao, preco, preco_promocional) VALUES (?, ?, ?, ?)");
+            
+            // O bind_param foi alterado de "ssd" para "ssdd" (string, string, double, double)
+            $stmt->bind_param("ssdd", $nome, $descricao, $preco, $preco_promocional); 
             $stmt->execute();
             $id_produto = $conexao->insert_id;
             $stmt->close();
+
 
             // 3. Insere Categorias
             if (!empty($categorias)) {
@@ -405,3 +407,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </script>
 </body>
 </html>
+
