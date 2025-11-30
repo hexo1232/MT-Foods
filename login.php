@@ -124,67 +124,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     // --- Lógica de Migração de Carrinho Otimizada ---
-                    if (isset($_COOKIE['carrinho'])) {
-                        $carrinhoCookie = json_decode(urldecode($_COOKIE['carrinho']), true);
+                    // --- Lógica de Migração de Carrinho Otimizada ---
+if (isset($_COOKIE['carrinho'])) {
+    $carrinhoCookie = json_decode(urldecode($_COOKIE['carrinho']), true);
+    if (is_array($carrinhoCookie)) {
+        foreach ($carrinhoCookie as $item) {
+            $id_produto = (int)($item['id_produto'] ?? 0);
+            $quantidade = (int)($item['quantidade'] ?? 0);
+            $subtotal = (float)($item['subtotal'] ?? 0);
+            $id_tipo_item_carrinho = (int)($item['id_tipo_item_carrinho'] ?? 1);
+            $detalhes_personalizacao = $item['detalhes_personalizacao'] ?? "Sem personalizações adicionais.";
+            
+            // 🟢 CRÍTICO: Preservar o UUID do cookie
+            $uuid_cookie = $item['uuid'] ?? bin2hex(random_bytes(16));
 
-                        if (is_array($carrinhoCookie)) {
-                            foreach ($carrinhoCookie as $item) {
-                                $id_produto = (int)($item['id_produto'] ?? 0);
-                                $quantidade = (int)($item['quantidade'] ?? 0);
-                                $subtotal = (float)($item['subtotal'] ?? 0);
-                                $id_tipo_item_carrinho = (int)($item['id_tipo_item_carrinho'] ?? 1);
-                                $detalhes_personalizacao = $item['detalhes_personalizacao'] ?? "Sem personalizações adicionais.";
+            // Inserir item no novo carrinho do usuário logado COM UUID
+            if ($id_produto > 0 && $quantidade > 0) {
+                $stmt_item = $conexao->prepare("
+                    INSERT INTO item_carrinho
+                    (id_carrinho, id_produto, quantidade, subtotal, id_tipo_item_carrinho, detalhes_personalizacao, uuid)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                ");
+                // 🟢 Adicionar 's' para string do UUID
+                $stmt_item->bind_param("iiidsss", $id_carrinho, $id_produto, $quantidade, $subtotal, $id_tipo_item_carrinho, $detalhes_personalizacao, $uuid_cookie);
+                $stmt_item->execute();
+                $id_item_carrinho = $stmt_item->insert_id;
 
-                                // Inserir item no novo carrinho do usuário logado
-                                if ($id_produto > 0 && $quantidade > 0) {
-                                    $stmt_item = $conexao->prepare("
-                                        INSERT INTO item_carrinho
-                                        (id_carrinho, id_produto, quantidade, subtotal, id_tipo_item_carrinho, detalhes_personalizacao)
-                                        VALUES (?, ?, ?, ?, ?, ?)
-                                    ");
-                                    $stmt_item->bind_param("iiidss", $id_carrinho, $id_produto, $quantidade, $subtotal, $id_tipo_item_carrinho, $detalhes_personalizacao);
-                                    $stmt_item->execute();
-                                    $id_item_carrinho = $stmt_item->insert_id;
-
-                                    // Se o item é personalizado, migra os ingredientes
-                                    if ($id_tipo_item_carrinho == 2) {
-                                        $reduzidos = $item['ingredientes_reduzidos'] ?? [];
-                                        $incrementos = $item['ingredientes_incrementados'] ?? [];
-                                        
-                                        // Migra os ingredientes incrementados, um por vez, com base na quantidade
-                                        foreach ($incrementos as $ing) {
-                                            if (isset($ing['id_ingrediente'])) {
-                                                // Loop para inserir a quantidade correta de ingredientes
-                                                for ($i = 0; $i < ($ing['qtd'] ?? 1); $i++) {
-                                                    $stmt_ing = $conexao->prepare("INSERT INTO carrinho_ingrediente (id_item_carrinho, id_ingrediente, tipo, preco) VALUES (?, ?, ?, ?)");
-                                                    $tipo = 'extra';
-                                                    $preco_ing = (float)($ing['preco'] ?? 0);
-                                                    $stmt_ing->bind_param("iisd", $id_item_carrinho, $ing['id_ingrediente'], $tipo, $preco_ing);
-                                                    $stmt_ing->execute();
-                                                }
-                                            }
-                                        }
-
-                                        // Migra os ingredientes reduzidos, um por vez, com base na quantidade
-                                        foreach ($reduzidos as $ing) {
-                                            if (isset($ing['id_ingrediente'])) {
-                                                // Loop para inserir a quantidade correta de ingredientes
-                                                for ($i = 0; $i < ($ing['qtd'] ?? 1); $i++) {
-                                                    $stmt_ing = $conexao->prepare("INSERT INTO carrinho_ingrediente (id_item_carrinho, id_ingrediente, tipo, preco) VALUES (?, ?, ?, ?)");
-                                                    $tipo = 'removido';
-                                                    $preco_ing = 0.00; // Preço para itens removidos é zero
-                                                    $stmt_ing->bind_param("iisd", $id_item_carrinho, $ing['id_ingrediente'], $tipo, $preco_ing);
-                                                    $stmt_ing->execute();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                // Se o item é personalizado, migra os ingredientes
+                if ($id_tipo_item_carrinho == 2) {
+                    $reduzidos = $item['ingredientes_reduzidos'] ?? [];
+                    $incrementos = $item['ingredientes_incrementados'] ?? [];
+                    
+                    // Migra os ingredientes incrementados
+                    foreach ($incrementos as $ing) {
+                        if (isset($ing['id_ingrediente'])) {
+                            for ($i = 0; $i < ($ing['qtd'] ?? 1); $i++) {
+                                $stmt_ing = $conexao->prepare("
+                                    INSERT INTO carrinho_ingrediente 
+                                    (id_item_carrinho, id_ingrediente, tipo, preco) 
+                                    VALUES (?, ?, ?, ?)
+                                ");
+                                $tipo = 'extra';
+                                $preco_ing = (float)($ing['preco'] ?? 0);
+                                $stmt_ing->bind_param("iisd", $id_item_carrinho, $ing['id_ingrediente'], $tipo, $preco_ing);
+                                $stmt_ing->execute();
                             }
                         }
-                        // Limpa o cookie do carrinho após a migração
-                        setcookie('carrinho', '', time() - 3600, "/");
                     }
+                    
+                    // Migra os ingredientes reduzidos
+                    foreach ($reduzidos as $ing) {
+                        if (isset($ing['id_ingrediente'])) {
+                            for ($i = 0; $i < ($ing['qtd'] ?? 1); $i++) {
+                                $stmt_ing = $conexao->prepare("
+                                    INSERT INTO carrinho_ingrediente 
+                                    (id_item_carrinho, id_ingrediente, tipo, preco) 
+                                    VALUES (?, ?, ?, ?)
+                                ");
+                                $tipo = 'removido';
+                                $preco_ing = 0.00;
+                                $stmt_ing->bind_param("iisd", $id_item_carrinho, $ing['id_ingrediente'], $tipo, $preco_ing);
+                                $stmt_ing->execute();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // Limpa o cookie do carrinho após a migração
+    setcookie('carrinho', '', time() - 3600, "/");
+}
 
                     // Se tudo correu bem, comita as alterações
                     $conexao->commit();
